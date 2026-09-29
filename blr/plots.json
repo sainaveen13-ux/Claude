@@ -1,0 +1,6 @@
+{
+  "plots": [
+    { "house": true, "cells": [[141,108],[141,109],[141,110],[142,108],[142,109],[142,110]], "name": "Ten Rupee Estates", "cat": "traffic", "color": "#1b1b1f", "msg": "SITE OFFICE. Open 24x7 because we're stuck in traffic." },
+    { "house": true, "cells": [[133,145],[133,146],[134,145],[134,146]], "name": "Ten Rupee Estates", "cat": "roads", "color": "#0c8599", "msg": "Lake-view sample plot. Foam is complimentary." }
+  ]
+}

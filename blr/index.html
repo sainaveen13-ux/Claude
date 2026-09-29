@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ten Rupee Estates</title>
+<meta name="description" content="Can't afford a house in Bengaluru? Buy a plot for ₹10. No broker. No 10-month deposit. No landlord. Write your frustration on it for the whole city to see.">
+<meta property="og:title" content="Finally, land in Bengaluru I can afford. ₹10.">
+<meta property="og:description" content="Premium plots in Koramangala, Indiranagar, HSR & Whitefield. ₹10 a cell. No broker. No deposit. Your land, your rant.">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ec;--panel:#fff;--fg:#1b1b1f;--mut:#6b6b76;--acc:#e03131;--gold:#c9a227;--ok:#2b8a3e;--line:#e3ded2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121215;--panel:#1c1c21;--fg:#f1f1f3;--mut:#a0a0ab;--line:#2d2d35}}
+:root[data-theme="dark"]{--bg:#121215;--panel:#1c1c21;--fg:#f1f1f3;--mut:#a0a0ab;--line:#2d2d35}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 Inter,system-ui,sans-serif}
+.ribbon{background:var(--acc);color:#fff;text-align:center;font-weight:800;font-size:13px;padding:6px 16px;letter-spacing:.04em}
+header{max-width:1100px;margin:auto;padding:20px 16px 4px;text-align:center}
+.brand{font-family:"Archivo Black",sans-serif;font-size:clamp(30px,7vw,60px);line-height:1;margin:0}
+.brand span{color:var(--gold)}
+.hook{font-size:clamp(18px,3.4vw,26px);font-weight:800;margin:12px 0 4px}
+.hook em{font-style:normal;color:var(--acc)}
+.sub{color:var(--mut);margin:0 auto 10px;max-width:700px}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.badges span{border:2px solid var(--fg);border-radius:6px;padding:2px 10px;font-weight:800;font-size:13px;transform:rotate(-1deg)}
+.badges span:nth-child(2n){transform:rotate(1.5deg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;max-width:800px;margin:12px auto}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.stat b{display:block;font-size:20px;font-weight:800}
+.stat small{color:var(--mut)}
+main{max-width:1100px;margin:auto;padding:8px 16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.chip,button,.btn{font:inherit;font-weight:600;padding:7px 13px;border-radius:99px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer;text-decoration:none;display:inline-block;font-size:15px}
+.chip.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.pri{background:var(--acc)!important;border-color:var(--acc)!important;color:#fff!important;font-weight:800!important}
+.wa{background:#25d366!important;border-color:#25d366!important;color:#07351b!important;font-weight:800!important}
+button:disabled{opacity:.4;cursor:not-allowed}
+#mapBox{position:relative;height:72vh;min-height:420px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+#map{position:absolute;inset:0}
+#ov{position:absolute;inset:0;pointer-events:none;z-index:450}
+#cart{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:600;background:var(--panel);border:2px solid var(--fg);border-radius:14px;padding:8px 10px 8px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 30px #0004;max-width:calc(100% - 24px)}
+#cart span{font-weight:700;font-size:14px}
+#hint{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:600;background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:99px;font-size:13px;font-weight:600;white-space:nowrap;max-width:calc(100% - 80px);overflow:hidden;text-overflow:ellipsis}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card h3{font-family:"Archivo Black",sans-serif;font-weight:400;margin:0 0 6px;font-size:20px}
+.feed div{padding:9px 0;border-bottom:1px dashed var(--line)}
+.feed small,.lb small{color:var(--mut)}
+.lb div{padding:4px 0}.lb i{display:block;height:6px;background:var(--acc);border-radius:9px;margin-top:3px}
+label{display:block;font-size:14px;color:var(--mut);margin-top:10px;font-weight:600}
+input,select{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit}
+dialog{background:var(--panel);color:var(--fg);border:2px solid var(--fg);border-radius:18px;max-width:440px;width:calc(100% - 24px);padding:20px;max-height:92vh}
+dialog::backdrop{background:#000b}
+dialog h3{font-family:"Archivo Black",sans-serif;font-weight:400;margin:0;font-size:22px}
+#qr{background:#fff;padding:10px;border-radius:10px;width:max-content;margin:10px auto}
+.paints{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.paints span{width:30px;height:30px;border-radius:6px;cursor:pointer;border:3px solid transparent}
+.paints span.on{border-color:var(--fg)}
+#cert{width:100%;border-radius:10px;margin-top:10px}
+#story{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:var(--panel);border:2px solid var(--fg);border-radius:16px;padding:14px 16px;display:none;z-index:1000;box-shadow:0 10px 40px #0006}
+#story .x{position:absolute;right:8px;top:6px;border:0;background:none;font-size:20px;padding:0 6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.step{display:none}.step.on{display:block}
+.big{font-size:28px;font-weight:800;margin:6px 0 2px}
+.small{font-size:13px;color:var(--mut)}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:30px 16px}
+a{color:var(--acc)}
+.leaflet-container{background:#e8e4da;font:inherit}
+</style>
+</head>
+<body>
+<div class="ribbon">⚠️ PRE-LAUNCH OFFER · NEAR UPCOMING METRO (UPCOMING SINCE 2012) · LIMITED PLOTS · NO BROKERAGE</div>
+<header>
+  <h1 class="brand">TEN RUPEE <span>ESTATES</span></h1>
+  <p class="hook">Can't afford a house in Bengaluru? <em>Buy a plot for ₹10.</em></p>
+  <p class="sub">Real map. Real localities. Your own land, finally. Put your frustration on it so the whole city can read it.</p>
+  <div class="badges"><span>NO BROKER</span><span>NO 10-MONTH DEPOSIT</span><span>NO LANDLORD</span><span>NO "VEG ONLY"</span><span>NO "BACHELORS NOT ALLOWED"</span></div>
+  <div class="stats">
+    <div class="stat"><b id="sOwners">0</b><small>landowners so far</small></div>
+    <div class="stat"><b id="sCells">0</b><small>cells sold</small></div>
+    <div class="stat"><b id="sTop">None yet</b><small>most frustrated locality</small></div>
+    <div class="stat"><b>₹10</b><small>per cell, everywhere. Even Indiranagar.</small></div>
+  </div>
+</header>
+
+<main>
+  <div class="chips" id="chips"></div>
+  <div id="mapBox">
+    <div id="map"></div>
+    <canvas id="ov"></canvas>
+    <div id="hint">Zoom in and tap cells to pick your plot</div>
+    <div id="cart" hidden><span id="cartTxt"></span><button id="clearBtn">Clear</button><button class="pri" id="buyBtn">Buy plot</button></div>
+  </div>
+  <div class="chips"><button id="randBtn">🎲 Read a random rant</button><button id="meBtn">📍 Plots near me</button></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Rent reality check 😭</h3>
+      <p class="small" style="margin:0">Enter what Bengaluru actually charges you.</p>
+      <label>Your monthly rent (₹)</label><input id="rRent" type="number" value="35000">
+      <label>Deposit (months of rent)</label><input id="rDep" type="number" value="10">
+      <div id="rOut"></div>
+      <div class="row"><button class="wa" id="rShare">Share my pain</button></div>
+    </div>
+    <div class="card">
+      <h3>Fresh rants from the land 👀</h3>
+      <div class="feed" id="feed"><small>No landowners yet. Be the first person in history to own land in Koramangala.</small></div>
+    </div>
+    <div class="card">
+      <h3>Most frustrated localities 🏆</h3>
+      <div class="lb" id="lb"><small>No locality leads yet. Will it be Bellandur? Whitefield? Yours?</small></div>
+      <div class="row"><button class="wa" id="lbShare">Challenge your locality</button></div>
+    </div>
+    <div class="card">
+      <h3>How it works</h3>
+      <ol style="padding-left:20px;margin:0">
+        <li>Zoom into any locality and tap cells to build your plot. Each cell is ₹10.</li>
+        <li>Pick your frustration and write your comment (max 60 characters).</li>
+        <li>Pay by UPI and send the order on WhatsApp.</li>
+        <li>Your plot goes live within 24 hours, and you get an <b>Allotment Letter</b> to flex.</li>
+      </ol>
+      <p class="small">Not allowed: politics, hate against any community, abuse, naming real people or landlords, betting or adult content. Anything rejected is refunded in full.</p>
+    </div>
+  </div>
+</main>
+
+<div id="story"><button class="x" id="storyX" aria-label="Close">✕</button><div id="storyBody"></div></div>
+
+<dialog id="dlg">
+  <div class="step on" id="st1">
+    <h3>Register your plot</h3>
+    <p id="dMeta" class="small" style="margin:4px 0"></p>
+    <label>Your name (or alias)</label><input id="fName" maxlength="24" placeholder="Tired Techie">
+    <label>What's your frustration?</label><select id="fCat"></select>
+    <label>Your comment for the city (max 60)</label><input id="fMsg" maxlength="60" placeholder="Paid 10 months deposit. Got 0 months of peace.">
+    <label>Plot colour</label><div class="paints" id="paints"></div>
+    <label>Link (optional: your Insta, X or LinkedIn)</label><input id="fUrl" placeholder="https://">
+    <div class="row"><button class="pri" id="toPay">Continue →</button><button id="close1">Cancel</button></div>
+  </div>
+  <div class="step" id="st2">
+    <h3>Pay the "registration"</h3>
+    <p style="text-align:center;margin:6px 0">₹<b id="dAmt"></b> · Order <b id="dId"></b><br><span class="small">That's it. No stamp duty. No "khata transfer charges". No chai-pani.</span></p>
+    <div id="qr"></div>
+    <p style="text-align:center;margin:0"><a class="btn pri" id="upiLink" href="#">Pay with any UPI app</a></p>
+    <label>UPI transaction ID (UTR)</label><input id="fUtr" placeholder="12-digit UTR from your UPI app">
+    <div class="row"><button class="wa" id="sendBtn">Send order on WhatsApp ✅</button><button id="back2">← Back</button></div>
+  </div>
+  <div class="step" id="st3">
+    <h3>Congratulations, landowner! 🎉</h3>
+    <p style="margin:4px 0">Order received. Your plot goes live within 24 hours. Here's your allotment letter:</p>
+    <img id="cert" alt="Allotment letter">
+    <div class="row"><a class="btn pri" id="certDl" download="ten-rupee-estates-allotment.png">Download</a><button class="wa" id="certShare">Share it</button><button id="close3">Done</button></div>
+  </div>
+</dialog>
+
+<footer>A satire project by <a href="https://www.youtube.com/@RupayaFiles">Rupaya Files</a>. Watch the whole journey on YouTube.<br>
+Ten Rupee Estates is parody. Plots are pixels on a map, not real land. No real property, approval or title is offered or implied. Map © OpenStreetMap contributors © CARTO.</footer>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// ===== CONFIG: fill in before launch =====
+const CONFIG = {
+  upiId:    "yourname@upi",
+  payee:    "Ten Rupee Estates",
+  whatsapp: "919999999999",     // with country code, no +
+  pricePerCell: 10,
+  maxCells: 200,
+  site: location.href.split('#')[0]
+};
+// =========================================
+
+// Grid over Bengaluru: each cell is 0.0015° (~165 m)
+const LAT0 = 13.13, LNG0 = 77.46, D = 0.0015, ROWS = 200, COLS = 230, RADIUS_KM = 3.2;
+
+// Real localities: [name, code, lat, lng, quip]
+const AREAS = [
+  ["Koramangala","KOR",12.9352,77.6245,"Startup capital. Your plot is pre-revenue."],
+  ["Indiranagar","IND",12.9784,77.6408,"100 Feet Road. 0 feet of parking."],
+  ["HSR Layout","HSR",12.9116,77.6474,"Every second resident is a 'founder'."],
+  ["BTM Layout","BTM",12.9166,77.6101,"Bachelor capital. Landlord says 'family only'."],
+  ["Silk Board Junction","SLK",12.9177,77.6233,"Comes with a lifetime view of the same traffic jam."],
+  ["Bellandur","BEL",12.9304,77.6784,"Lake view. The lake may occasionally catch fire."],
+  ["Sarjapur Road","SAR",12.9105,77.6860,"'Just 20 minutes from ORR.' At 3 AM."],
+  ["Marathahalli","MAR",12.9591,77.6974,"The bridge is always being fixed."],
+  ["Whitefield","WHF",12.9698,77.7500,"The metro finally reached. Your salary didn't."],
+  ["Brookefield","BRK",12.9655,77.7185,"Near the tech park. Nowhere near affordable."],
+  ["Mahadevapura","MDP",12.9916,77.7010,"Flooded in 2022. Rent went up anyway."],
+  ["KR Puram","KRP",13.0070,77.6950,"Hanging bridge, hanging hopes."],
+  ["Hoodi","HOD",12.9923,77.7160,"Where the cab driver cancels your ride."],
+  ["Electronic City","ECY",12.8452,77.6602,"Free 2-hour commute with every plot."],
+  ["Bannerghatta Road","BGR",12.8880,77.5970,"The traffic moves slower than the zoo animals."],
+  ["JP Nagar","JPN",12.9063,77.5857,"Phase 1 to 9. Rent phases only go up."],
+  ["Jayanagar","JAY",12.9250,77.5938,"Old Bangalore charm. New Bangalore rent."],
+  ["Basavanagudi","BSV",12.9422,77.5738,"Aunties here will judge your plot too."],
+  ["Banashankari","BSK",12.9255,77.5468,"Temple, metro, and one available flat. Taken."],
+  ["MG Road","MGR",12.9756,77.6050,"Prime central land. Finally within your budget."],
+  ["Ulsoor","ULS",12.9817,77.6286,"Lake-facing, landlord-free."],
+  ["Domlur","DOM",12.9610,77.6387,"The flyover took your peace. Get it back for ₹10."],
+  ["Frazer Town","FRZ",12.9982,77.6146,"Come for the biryani, stay for the ₹10 plot."],
+  ["Malleshwaram","MAL",13.0031,77.5643,"Filter coffee included. Deposit not required."],
+  ["Rajajinagar","RAJ",12.9910,77.5525,"Wide roads, narrow budgets."],
+  ["Majestic","MAJ",12.9767,77.5713,"Every bus comes here. None leave on time."],
+  ["Vijayanagar","VJN",12.9719,77.5352,"Metro-connected, landlord-disconnected."],
+  ["Yeshwanthpur","YPR",13.0280,77.5409,"Railway junction. Your life is also at a junction."],
+  ["Peenya","PNY",13.0285,77.5197,"Asia's largest industrial area, smallest flats."],
+  ["Hebbal","HBL",13.0358,77.5970,"The flyover of dreams (and of queues)."],
+  ["Manyata Tech Park","MNY",13.0450,77.6210,"Walk to office in theory. Drive for an hour in practice."],
+  ["Hennur","HEN",13.0400,77.6420,"Up-and-coming since forever."],
+  ["Banaswadi","BNW",13.0104,77.6480,"Cheaper than Indiranagar. Emotionally the same."],
+  ["RT Nagar","RTN",13.0212,77.5946,"Quiet streets, loud rent."],
+  ["Yelahanka","YLK",13.1005,77.5963,"Near the airport. Far from everything else."],
+  ["Kengeri","KEN",12.9081,77.4851,"Metro's last stop. So is your patience."],
+  ["Nagarbhavi","NGB",12.9600,77.5100,"Your office is 28 km away. You live here anyway."],
+  ["Kanakapura Road","KNK",12.8800,77.5600,"New apartments. Old excuses for delay."]
+];
+const CATS = {
+  rent:     {e:"🏠", t:"Rent", c:"#e03131"},
+  deposit:  {e:"💸", t:"Deposit", c:"#f08c00"},
+  broker:   {e:"🤝", t:"Broker", c:"#9c36b5"},
+  landlord: {e:"🧓", t:"Landlord", c:"#5c3d2e"},
+  traffic:  {e:"🚗", t:"Traffic", c:"#1971c2"},
+  water:    {e:"🚰", t:"Water tanker", c:"#0c8599"},
+  roads:    {e:"🕳️", t:"Potholes & floods", c:"#495057"},
+  dream:    {e:"✨", t:"Dream home someday", c:"#2b8a3e"}
+};
+const PAINTS = ["#e03131","#f08c00","#fab005","#2b8a3e","#1971c2","#9c36b5","#1b1b1f","#e64980"];
+const $ = id => document.getElementById(id);
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const esc = s => String(s||"").replace(/[<>&"]/g, m => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[m]));
+
+// ---- geometry ----
+const kmDist = (a1,o1,a2,o2) => { const x=(o2-o1)*Math.cos((a1+a2)/2*Math.PI/180)*111.32, y=(a2-a1)*110.57; return Math.hypot(x,y); };
+const areaCache = new Map();
+function areaOf(r,c){
+  const k=r*1000+c; if(areaCache.has(k)) return areaCache.get(k);
+  const lat=LAT0-(r+.5)*D, lng=LNG0+(c+.5)*D; let best=null, bd=1e9;
+  for(let i=0;i<AREAS.length;i++){ const d=kmDist(lat,lng,AREAS[i][2],AREAS[i][3]); if(d<bd){bd=d;best=i;} }
+  const v = bd<=RADIUS_KM ? best : -1; areaCache.set(k,v); return v;
+}
+const cellOf = ll => ({r:Math.floor((LAT0-ll.lat)/D), c:Math.floor((ll.lng-LNG0)/D)});
+const plotId = (r,c) => { const a=areaOf(r,c); return (a>=0?AREAS[a][1]:"XXX")+"-"+String(r*COLS+c).padStart(5,"0"); };
+let areaCells=null;
+function areaCellCount(i){ if(!areaCells){ areaCells=new Array(AREAS.length).fill(0); for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){ const a=areaOf(r,c); if(a>=0) areaCells[a]++; } } return areaCells[i]; }
+
+// ---- map ----
+const map = L.map("map",{zoomControl:true,minZoom:11,maxZoom:18,maxBounds:[[12.75,77.35],[13.2,77.9]]}).setView([12.955,77.62],13);
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{subdomains:"abcd",maxZoom:19,
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
+const ov=$("ov"), g=ov.getContext("2d");
+let plots=[], owned=new Map(), cart=new Map(), filter=null, paint=PAINTS[0], order=null;
+const SELECT_ZOOM=15;
+
+function draw(){
+  const s=map.getSize(), dpr=devicePixelRatio||1;
+  if(ov.width!==s.x*dpr){ ov.width=s.x*dpr; ov.height=s.y*dpr; ov.style.width=s.x+"px"; ov.style.height=s.y+"px"; }
+  g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,s.x,s.y);
+  const z=map.getZoom(), b=map.getBounds();
+  const r0=Math.max(0,Math.floor((LAT0-b.getNorth())/D)), r1=Math.min(ROWS-1,Math.floor((LAT0-b.getSouth())/D));
+  const c0=Math.max(0,Math.floor((b.getWest()-LNG0)/D)), c1=Math.min(COLS-1,Math.floor((b.getEast()-LNG0)/D));
+  const rect=(r,c)=>{ const p=map.latLngToContainerPoint([LAT0-r*D,LNG0+c*D]), q=map.latLngToContainerPoint([LAT0-(r+1)*D,LNG0+(c+1)*D]); return [p.x,p.y,Math.max(2,q.x-p.x),Math.max(2,q.y-p.y)]; };
+  if(z>=14){
+    g.strokeStyle="rgba(224,49,49,.28)"; g.lineWidth=1;
+    for(let r=r0;r<=r1;r++) for(let c=c0;c<=c1;c++) if(areaOf(r,c)>=0){ const [x,y,w,h]=rect(r,c); g.strokeRect(x+.5,y+.5,w,h); }
+  }
+  for(const p of plots){
+    const dim = filter && p.cat!==filter;
+    g.globalAlpha = dim ? .12 : .85; g.fillStyle = p.color || CATS[p.cat]?.c || "#e03131";
+    for(const [r,c] of p.cells){ if(r<r0-1||r>r1+1||c<c0-1||c>c1+1) continue; const [x,y,w,h]=rect(r,c); g.fillRect(x,y,w,h); }
+    if(!dim && z>=16){ const [r,c]=p.cells[0], [x,y,w,h]=rect(r,c); g.globalAlpha=1; g.font="600 12px Inter,sans-serif"; g.fillStyle="#fff"; g.strokeStyle="#000a"; g.lineWidth=3;
+      const t=(CATS[p.cat]?.e||"")+" "+p.msg; g.strokeText(t,x+3,y+h/2+4,w*Math.max(3,p.cells.length)); g.fillText(t,x+3,y+h/2+4,w*Math.max(3,p.cells.length)); }
+  }
+  g.globalAlpha=.75; g.fillStyle="#2b8a3e";
+  for(const [,v] of cart){ const [x,y,w,h]=rect(v.r,v.c); g.fillRect(x,y,w,h); }
+  g.globalAlpha=1;
+  $("hint").textContent = z<SELECT_ZOOM ? "Zoom in to pick cells (each cell ≈ 165 m)" : "Tap empty cells to build your plot. Tap a coloured plot to read it.";
+}
+map.on("move zoom resize viewreset",draw);
+
+map.on("click",e=>{
+  const {r,c}=cellOf(e.latlng), inGrid = r>=0&&c>=0&&r<ROWS&&c<COLS;
+  const k=r*1000+c, p=inGrid && owned.get(k);
+  if(p) return showStory(p);
+  const a=inGrid ? areaOf(r,c) : -1;
+  if(a<0) return toast("🚧 Unapproved layout", "This area isn't sanctioned by Ten Rupee Estates. Just like half the layouts on the city's outskirts. Try a named locality.");
+  if(map.getZoom()<SELECT_ZOOM){ map.setView(e.latlng,SELECT_ZOOM); return; }
+  if(cart.has(k)) cart.delete(k); else { if(cart.size>=CONFIG.maxCells) return toast("Whoa, land baron","Max "+CONFIG.maxCells+" cells per order. Leave some land for the rest of us."); cart.set(k,{r,c}); }
+  if(cart.size===1) { const q=AREAS[a]; toast("📍 "+q[0], q[4]); }
+  updateCart(); draw();
+});
+function cartArea(){ const cnt={}; for(const [,v] of cart){ const a=areaOf(v.r,v.c); cnt[a]=(cnt[a]||0)+1; } return +Object.entries(cnt).sort((x,y)=>y[1]-x[1])[0][0]; }
+function updateCart(){
+  $("cart").hidden = !cart.size; if(!cart.size) return;
+  $("cartTxt").textContent = `${cart.size} cell${cart.size>1?"s":""} in ${AREAS[cartArea()][0]} · ${inr(cart.size*CONFIG.pricePerCell)}`;
+}
+$("clearBtn").onclick=()=>{ cart.clear(); updateCart(); draw(); };
+
+function showStory(p){
+  const cat=CATS[p.cat]||{}, area=AREAS[p.area]||["Bengaluru"];
+  const share=`"${p.msg}" says a landowner in ${area[0]} 😭\nI finally found land in Bengaluru I can afford: ₹10 a plot, no broker, no deposit. ${CONFIG.site}`;
+  $("storyBody").innerHTML = `<div style="font-size:28px">${cat.e||"📍"}</div>
+   <b style="font-size:19px">"${esc(p.msg)}"</b><br>
+   <span>${esc(p.name)} · landowner in <b>${esc(area[0])}</b></span><br>
+   <span class="small">${esc(cat.t||"")} · Plot ${plotId(p.cells[0][0],p.cells[0][1])} · ${p.cells.length} cell${p.cells.length>1?"s":""}</span>
+   <div class="row"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(share)}">Share this rant</a>
+   ${p.url?`<a class="btn" target="_blank" rel="noopener nofollow" href="${esc(p.url)}">Visit ↗</a>`:""}</div>`;
+  $("story").style.display="block";
+}
+function toast(t,m){ $("storyBody").innerHTML=`<b style="font-size:18px">${esc(t)}</b><p style="margin:4px 0 0">${esc(m)}</p>`; $("story").style.display="block"; }
+$("storyX").onclick=()=>$("story").style.display="none";
+$("randBtn").onclick=()=>{ const real=plots.filter(p=>!p.house); if(!real.length) return toast("It's quiet here","No rants yet. Yours could be the first one on the map."); const p=real[Math.floor(Math.random()*real.length)]; map.setView(cellCenter(p.cells[0]),16); showStory(p); };
+$("meBtn").onclick=()=>{ if(!navigator.geolocation) return; navigator.geolocation.getCurrentPosition(pos=>map.setView([pos.coords.latitude,pos.coords.longitude],SELECT_ZOOM),()=>toast("Location blocked","No worries. Just zoom into your locality.")); };
+const cellCenter=([r,c])=>[LAT0-(r+.5)*D, LNG0+(c+.5)*D];
+
+$("chips").innerHTML='<button class="chip on" data-k="">All rants</button>'+Object.entries(CATS).map(([k,v])=>`<button class="chip" data-k="${k}">${v.e} ${v.t}</button>`).join("");
+$("chips").onclick=e=>{ const b=e.target.closest(".chip"); if(!b) return; filter=b.dataset.k||null; document.querySelectorAll("#chips .chip").forEach(x=>x.classList.toggle("on",x===b)); draw(); };
+
+// ---- order flow ----
+$("fCat").innerHTML=Object.entries(CATS).map(([k,v])=>`<option value="${k}">${v.e} ${v.t}</option>`).join("");
+$("paints").innerHTML=PAINTS.map(p=>`<span style="background:${p}" data-p="${p}"></span>`).join("");
+$("paints").onclick=e=>{ const s=e.target.closest("span"); if(!s) return; paint=s.dataset.p; markPaint(); };
+const markPaint=()=>document.querySelectorAll("#paints span").forEach(s=>s.classList.toggle("on",s.dataset.p===paint));
+function step(n){ ["st1","st2","st3"].forEach((s,i)=>$(s).classList.toggle("on",i===n-1)); }
+$("buyBtn").onclick=()=>{
+  const cells=[...cart.values()].map(v=>[v.r,v.c]), a=cartArea();
+  order={id:"TRE"+Math.random().toString(36).slice(2,7).toUpperCase(), cells, area:a, amt:cells.length*CONFIG.pricePerCell, plot:plotId(cells[0][0],cells[0][1])};
+  $("dMeta").textContent=`Plot ${order.plot} · ${AREAS[a][0]} · ${cells.length} cells · ${inr(order.amt)}`;
+  markPaint(); step(1); $("dlg").showModal();
+};
+$("close1").onclick=$("close3").onclick=()=>$("dlg").close();
+$("back2").onclick=()=>step(1);
+$("toPay").onclick=()=>{
+  if(!$("fName").value.trim()||!$("fMsg").value.trim()) return alert("Please add your name and your comment.");
+  const upi=`upi://pay?pa=${encodeURIComponent(CONFIG.upiId)}&pn=${encodeURIComponent(CONFIG.payee)}&am=${order.amt}&cu=INR&tn=${order.id}`;
+  $("dAmt").textContent=order.amt.toLocaleString("en-IN"); $("dId").textContent=order.id; $("upiLink").href=upi;
+  $("qr").innerHTML=""; if(window.QRCode) new QRCode($("qr"),{text:upi,width:170,height:170});
+  step(2);
+};
+$("sendBtn").onclick=()=>{
+  if(!$("fUtr").value.trim()) return alert("Please enter the UPI transaction ID so we can verify your payment.");
+  const o={...order,name:$("fName").value.trim(),cat:$("fCat").value,msg:$("fMsg").value.trim(),color:paint,url:$("fUrl").value.trim(),utr:$("fUtr").value.trim()};
+  const json=JSON.stringify({cells:o.cells,area:o.area,name:o.name,cat:o.cat,msg:o.msg,color:o.color,url:o.url});
+  const text=`🏗️ TEN RUPEE ESTATES ORDER ${o.id}\nPlot: ${o.plot} (${AREAS[o.area][0]}), ${o.cells.length} cells\nAmount: ₹${o.amt}\nUTR: ${o.utr}\nName: ${o.name}\nFrustration: ${o.cat}\nComment: ${o.msg}\n\nDATA: ${json}`;
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`,"_blank");
+  makeLetter(o); step(3); cart.clear(); updateCart(); draw();
+};
+
+// ---- allotment letter (the flex) ----
+function makeLetter(o){
+  const W=1080,H=1080,k=document.createElement("canvas"); k.width=W; k.height=H; const x=k.getContext("2d");
+  x.fillStyle="#fbf7ee"; x.fillRect(0,0,W,H);
+  x.fillStyle="#1b1b1f"; x.fillRect(0,0,W,130);
+  x.fillStyle="#fff"; x.font='54px "Archivo Black",sans-serif'; x.textAlign="center"; x.fillText("TEN RUPEE ESTATES",W/2,85);
+  x.fillStyle="#c9a227"; x.fillRect(0,130,W,10);
+  x.fillStyle="#1b1b1f"; x.font='800 44px Inter,sans-serif'; x.fillText("PLOT ALLOTMENT LETTER",W/2,215);
+  x.font='30px Inter,sans-serif'; x.fillStyle="#555"; x.fillText("This is to certify that",W/2,285);
+  x.font='800 78px Inter,sans-serif'; x.fillStyle="#e03131"; x.fillText(o.name,W/2,375,W-140);
+  x.font='30px Inter,sans-serif'; x.fillStyle="#555"; x.fillText("is now the proud owner of",W/2,435);
+  x.font='800 64px Inter,sans-serif'; x.fillStyle="#1b1b1f"; x.fillText(`Plot ${o.plot}`,W/2,520);
+  x.font='700 40px Inter,sans-serif'; x.fillStyle="#2b8a3e"; x.fillText(`${AREAS[o.area][0]}, Bengaluru · ${o.cells.length} cell${o.cells.length>1?"s":""}`,W/2,580,W-120);
+  const rows=[["Price paid",inr(o.amt)],["Security deposit","₹0"],["Brokerage","₹0"],["Landlord","You"]];
+  x.textAlign="left"; x.font='30px Inter,sans-serif';
+  rows.forEach(([a,b],i)=>{ const y=650+i*48; x.fillStyle="#555"; x.fillText(a,230,y); x.fillStyle="#1b1b1f"; x.font='800 30px Inter,sans-serif'; x.textAlign="right"; x.fillText(b,W-230,y); x.textAlign="left"; x.font='30px Inter,sans-serif'; });
+  x.fillStyle=o.color; x.fillRect(110,860,W-220,90); x.fillStyle="#fff"; x.textAlign="center"; x.font='700 34px Inter,sans-serif';
+  x.fillText(`${CATS[o.cat].e} "${o.msg}"`,W/2,917,W-260);
+  x.fillStyle="#888"; x.font='22px Inter,sans-serif'; x.fillText("Parody. Pixels on a map, not real land. Emotionally registered only.",W/2,1010);
+  x.save(); x.translate(W-150,300); x.rotate(-.35); x.strokeStyle="#e03131cc"; x.lineWidth=5; x.beginPath(); x.arc(0,0,78,0,7); x.stroke();
+  x.fillStyle="#e03131cc"; x.font='800 22px Inter,sans-serif'; x.fillText("NO BROKER",0,-6); x.fillText("NO DEPOSIT",0,22); x.restore();
+  const url=k.toDataURL("image/png"); $("cert").src=url; $("certDl").href=url;
+  $("certShare").onclick=async()=>{
+    const text=`I finally own land in ${AREAS[o.area][0]}, Bengaluru 🏡\nPaid ${inr(o.amt)}. No broker. No deposit. No landlord.\nGet yours before the "pre-launch offer" ends: ${CONFIG.site}`;
+    try{ const f=new File([await (await fetch(url)).blob()],"allotment.png",{type:"image/png"}); if(navigator.canShare&&navigator.canShare({files:[f]})) return navigator.share({files:[f],text}); }catch(e){}
+    window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank");
+  };
+}
+
+// ---- rent reality check (free viral hook) ----
+function rent(){
+  const r=+$("rRent").value||0, d=+$("rDep").value||0, rentCells=Math.floor(r/CONFIG.pricePerCell), dep=r*d, depCells=Math.floor(dep/CONFIG.pricePerCell);
+  const kor=areaCellCount(0), pct=depCells/kor*100;
+  $("rOut").innerHTML=`<p class="big">${rentCells.toLocaleString("en-IN")} cells</p><p style="margin:0">One month of your rent buys ${rentCells.toLocaleString("en-IN")} cells here.</p>
+   <p style="margin:8px 0 0">Your ${inr(dep)} deposit could buy <b>${pct>=100?"ALL of Koramangala, "+(depCells/kor).toFixed(1)+" times over":pct.toFixed(0)+"% of Koramangala"}</b>. 🫠</p>`;
+  return {r,dep,rentCells,pct};
+}
+["rRent","rDep"].forEach(id=>$(id).addEventListener("input",rent));
+$("rShare").onclick=()=>{ const v=rent(); window.open("https://wa.me/?text="+encodeURIComponent(`I pay ${inr(v.r)} rent in Bengaluru. That's ${v.rentCells.toLocaleString("en-IN")} plots on Ten Rupee Estates 😭\nMy deposit alone could buy ${v.pct>=100?"all of Koramangala":v.pct.toFixed(0)+"% of Koramangala"}.\nCheck yours: ${CONFIG.site}`),"_blank"); };
+
+// ---- stats, feed, leaderboard ----
+function stats(){
+  const real=plots.filter(p=>!p.house), sold=real.reduce((s,p)=>s+p.cells.length,0), by={};
+  for(const p of real) by[p.area]=(by[p.area]||0)+p.cells.length;
+  const top=Object.entries(by).sort((a,b)=>b[1]-a[1]);
+  $("sOwners").textContent=real.length.toLocaleString("en-IN");
+  $("sCells").textContent=sold.toLocaleString("en-IN");
+  if(top.length) $("sTop").textContent=AREAS[top[0][0]][0];
+  if(real.length) $("feed").innerHTML=real.slice(-8).reverse().map(p=>`<div>${CATS[p.cat]?.e||"📍"} <b>"${esc(p.msg)}"</b><br><small>${esc(p.name)} · ${esc(AREAS[p.area]?.[0]||"")}</small></div>`).join("");
+  if(top.length){ const max=top[0][1]; $("lb").innerHTML=top.slice(0,8).map(([a,n],i)=>`<div>${["🥇","🥈","🥉"][i]||"🏅"} ${esc(AREAS[a][0])} <small style="float:right">${n} cells</small><i style="width:${n/max*100}%"></i></div>`).join(""); }
+  $("lbShare").onclick=()=>{ const t=top[0]; window.open("https://wa.me/?text="+encodeURIComponent(t?`${AREAS[t[0]][0]} is the most frustrated locality in Bengaluru right now 😤 (${t[1]} cells of rants). Is your area suffering less? Prove it: ${CONFIG.site}`:`Which Bengaluru locality is the most fed up with rent? The map is empty. Claim it for your area: ${CONFIG.site}`),"_blank"); };
+}
+
+fetch("plots.json").then(r=>r.json()).then(d=>{
+  plots=(d.plots||[]).map(p=>({...p, area: p.area ?? areaOf(p.cells[0][0],p.cells[0][1])}));
+  for(const p of plots) for(const [r,c] of p.cells) owned.set(r*1000+c,p);
+  stats(); draw();
+}).catch(()=>{ stats(); draw(); });
+rent(); draw();
+</script>
+</body>
+</html>
