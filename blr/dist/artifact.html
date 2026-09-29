@@ -123,6 +123,22 @@ label{display:block;font-size:13px;font-weight:700;color:var(--mut);margin:12px 
 .broker p{margin:8px 0 0;font-size:14px}
 @media (max-width:900px){.amen{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.amen{grid-template-columns:1fr}}
+.proof{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:16px;align-items:start}
+.chart{display:grid;gap:14px;margin-top:6px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;align-items:center;cursor:default}
+.bar .lab{font-weight:800;font-size:15px}
+.bar .lab small{display:block;font-weight:500;color:var(--mut);font-size:12px}
+.track{position:relative;height:34px;border-bottom:1px solid var(--line)}
+.fillb{position:absolute;left:0;top:4px;bottom:4px;border-radius:0 4px 4px 0;background:var(--mut);opacity:.55;min-width:3px}
+.bar.hot .fillb{background:var(--alert);opacity:1}
+.val{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-weight:700;font-size:14px;white-space:nowrap;color:var(--fg);font-variant-numeric:tabular-nums}
+.bar:hover .fillb,.bar:focus-visible .fillb{opacity:1}
+.ctip{position:absolute;z-index:6;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;box-shadow:0 6px 24px #0003;pointer-events:none;width:max-content;max-width:260px}
+.axisnote{font-family:var(--f-mono);font-size:12px;color:var(--mut);display:flex;justify-content:space-between;margin-left:120px}
+.vs.num td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.vs.num td:nth-child(2),.vs.num td:last-child{color:var(--fg);font-weight:500}
+.vs.num tr.hot td{font-weight:800}
+@media (max-width:900px){.proof{grid-template-columns:1fr}.bar{grid-template-columns:86px minmax(0,1fr)}.axisnote{margin-left:96px}}
 footer{border-top:1.5px solid var(--fg);margin-top:20px;padding-block:22px 40px;color:var(--mut);font-size:13px}
 
 /* dialogs */
@@ -174,7 +190,7 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
       <p class="eyebrow">Ten Rupee Estates · Bengaluru · All 243 BBMP wards</p>
       <h1>Can't afford a house in Bengaluru? Own land for <span class="price">₹10.</span></h1>
       <p class="lede">Pick a cell anywhere inside city limits and it's yours. Write your frustration on it so the whole city can read it.</p>
-      <div class="cta"><a class="btn gold" href="#map">Pick my plot →</a><a class="btn ghost" href="#rent">Check my rent pain</a></div>
+      <div class="cta"><a class="btn gold" href="#map">Pick my plot →</a><a class="btn ghost" href="#rent">Check my rent pain</a><a class="btn ghost" href="#proof">"This is nonsense"</a></div>
       <p class="fine">*T&amp;C: ₹10 excludes GST, parking, club membership, and your peace of mind. Just kidding. It's ₹10.<br>🔥 <span id="brokersViewing">14</span> brokers are viewing this page right now. They are not happy.</p>
     </div>
     <div class="stickers" aria-label="What you don't pay">
@@ -270,6 +286,28 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
         <tr><td>Landlord visits</td><td>"Just checking the flat"</td><td>You are the landlord</td></tr>
       </tbody>
     </table></div>
+  </section>
+
+  <section id="proof">
+    <h2>"This is nonsense." Fine, here are the numbers.</h2>
+    <div class="proof">
+      <div class="panel" style="position:relative">
+        <h3>The deposit you pay before you get the keys</h3>
+        <p class="s">Measured in months of average take-home salary. Hover a bar to see the working.</p>
+        <div class="chart" id="depChart" role="img" aria-label="Upfront deposit in months of take-home salary: Bengaluru 3.6, New York 0.8, London 0.7"></div>
+        <div class="axisnote"><span>0</span><span>months of salary →</span></div>
+        <div class="ctip" id="ctip" hidden></div>
+      </div>
+      <div class="panel">
+        <h3>The fine print, honestly</h3>
+        <div class="tblwrap" style="border:0"><table class="vs num">
+          <thead><tr><th>City</th><th>1BHK rent as % of take-home pay</th><th>Usual deposit</th></tr></thead>
+          <tbody id="proofRows"></tbody>
+        </table></div>
+        <p class="fine">Monthly rent eats a bigger share of pay in London and New York. Bengaluru gets you upfront: renting a flat can cost more than three months of salary before you've paid a single month's rent. London and New York cap deposits by law. Bengaluru relies on "custom".</p>
+        <p class="fine">Sources: rent (1BHK, city centre) and average monthly net salary from Wise cost-of-living data, September 2026. Deposit limits: England's Tenant Fees Act 2019 (5 weeks), New York's Housing Stability and Tenant Protection Act 2019 (1 month). Bengaluru's 10 months is the common market practice; some landlords ask for 6. Averages hide a lot, and your landlord may be worse.</p>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -731,6 +769,26 @@ $("brokerBlock").onclick = () => { $("brokerMsg").textContent = "Blocked. Congra
 $("brokerYes").onclick = () => { $("brokerMsg").textContent = "Very good sir. Visiting charge ₹500, token advance ₹50,000, brokerage one month. Plot is ₹10. Our plots don't need brokers, so Ramesh has left."; $("brokerBlock").hidden = $("brokerYes").hidden = true; setTimeout(() => $("broker").hidden = true, 5000); };
 setTimeout(summonBroker, 25000);
 setInterval(() => { const n = 9 + Math.floor(Math.random() * 12); $("brokersViewing").textContent = n; }, 7000);
+
+// ---------- proof chart: deposit in months of take-home pay ----------
+// rent and salary: Wise cost-of-living (Sep 2026); deposit months: statutory caps (UK, NY) and Bengaluru custom
+const PROOF = [
+  { city: "Bengaluru", cur: "$", rent: 325, pay: 898, depMonths: 10, rule: "Up to 10 months (custom)", hot: true },
+  { city: "New York", cur: "$", rent: 4299, pay: 5157, depMonths: 1, rule: "Max 1 month (law)" },
+  { city: "London", cur: "£", rent: 2218, pay: 3581, depMonths: 5 * 12 / 52, rule: "Max 5 weeks (law)" }
+].map(d => ({ ...d, share: d.rent / d.pay * 100, depPay: d.rent * d.depMonths / d.pay }));
+(function proofChart() {
+  const max = Math.max(...PROOF.map(d => d.depPay)) * 1.5;   // headroom so the value label fits beside the longest bar
+  $("depChart").innerHTML = PROOF.map((d, i) => `<div class="bar${d.hot ? " hot" : ""}" tabindex="0" data-i="${i}">
+    <span class="lab">${d.city}<small>${d.rule}</small></span>
+    <span class="track"><span class="fillb" style="width:${d.depPay / max * 100}%"></span><span class="val" style="left:calc(${d.depPay / max * 100}% + 8px)">${d.depPay.toFixed(1)} months</span></span></div>`).join("");
+  $("proofRows").innerHTML = PROOF.map(d => `<tr class="${d.hot ? "hot" : ""}"><td>${d.city}</td><td>${d.share.toFixed(0)}%</td><td>${d.rule}</td></tr>`).join("");
+  const tip = $("ctip"), panel = $("depChart").parentElement;
+  const show = el => { const d = PROOF[+el.dataset.i], r = el.getBoundingClientRect(), pr = panel.getBoundingClientRect();
+    tip.innerHTML = `<b>${d.city}</b><br>Rent ${d.cur}${num(d.rent)}/month · take-home ${d.cur}${num(d.pay)}/month<br>Deposit ${d.depMonths.toFixed(d.depMonths % 1 ? 2 : 0)} × rent = ${d.cur}${num(d.rent * d.depMonths)}<br><b>= ${d.depPay.toFixed(1)} months of salary</b>`;
+    tip.hidden = false; tip.style.left = Math.min(r.left - pr.left + 120, pr.width - 270) + "px"; tip.style.top = (r.bottom - pr.top + 4) + "px"; };
+  panel.querySelectorAll(".bar").forEach(el => { el.addEventListener("mouseenter", () => show(el)); el.addEventListener("focus", () => show(el)); el.addEventListener("mouseleave", () => tip.hidden = true); el.addEventListener("blur", () => tip.hidden = true); });
+})();
 
 // ---------- boot ----------
 readColors();
