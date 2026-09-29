@@ -3,94 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rupaya Tools: Free Indian Money Calculators</title>
-<meta name="description" content="Free SIP, EMI and Old vs New Tax Regime calculators for India. Instant, private, no sign-up.">
-<style>
-:root{--bg:#0f1115;--card:#181b22;--fg:#e9ecf1;--mut:#9aa3b2;--acc:#f5b301;--line:#2a2f3a}
-@media (prefers-color-scheme: light){:root{--bg:#f7f7f9;--card:#fff;--fg:#14161a;--mut:#5b6472;--acc:#b77900;--line:#e2e5ea}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,sans-serif}
-main{max-width:760px;margin:auto;padding:24px 16px 64px}
-h1{margin:.2em 0}h1 span{color:var(--acc)}p.sub{color:var(--mut);margin-top:0}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-nav button{flex:1;min-width:120px;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;cursor:pointer;font:inherit}
-nav button.on{border-color:var(--acc);color:var(--acc)}
-section{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}section.on{display:block}
-label{display:block;margin:12px 0 4px;color:var(--mut);font-size:14px}
-input{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit}
-.out{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.out div{border:1px solid var(--line);border-radius:10px;padding:12px}.out b{display:block;font-size:20px}
-.out small{color:var(--mut)}.win{color:var(--acc);font-weight:600;margin-top:14px}
-footer{color:var(--mut);font-size:13px;margin-top:28px}a{color:var(--acc)}
-</style>
+<title>Ten Rupee Estates</title>
+<meta name="description" content="Can't afford a house in Bengaluru? Own a plot for ₹10.">
+<meta http-equiv="refresh" content="0; url=blr/">
+<link rel="canonical" href="blr/">
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#08121e;color:#eef2f7;font:16px system-ui,sans-serif}a{color:#e0b458}</style>
 </head>
-<body>
-<main>
-<h1>Rupaya <span>Tools</span></h1>
-<p class="sub">Free calculators for Indian money decisions. Everything runs in your browser.</p>
-<nav>
-  <button data-t="sip" class="on">SIP returns</button>
-  <button data-t="emi">Loan EMI</button>
-  <button data-t="tax">Old vs New tax</button>
-</nav>
-
-<section id="sip" class="on">
-  <label>Monthly SIP (₹)</label><input id="s_amt" type="number" value="10000">
-  <label>Expected annual return (%)</label><input id="s_r" type="number" value="12" step="0.1">
-  <label>Years</label><input id="s_y" type="number" value="15">
-  <label>Annual step-up (%)</label><input id="s_up" type="number" value="0">
-  <div class="out" id="s_out"></div>
-</section>
-
-<section id="emi">
-  <label>Loan amount (₹)</label><input id="e_p" type="number" value="3000000">
-  <label>Interest rate (% p.a.)</label><input id="e_r" type="number" value="8.5" step="0.05">
-  <label>Tenure (years)</label><input id="e_y" type="number" value="20">
-  <div class="out" id="e_out"></div>
-</section>
-
-<section id="tax">
-  <label>Gross annual salary (₹)</label><input id="t_inc" type="number" value="1500000">
-  <label>Old-regime deductions besides standard deduction (80C, 80D, HRA, home loan…) (₹)</label><input id="t_ded" type="number" value="250000">
-  <div class="out" id="t_out"></div>
-  <p class="win" id="t_win"></p>
-  <footer>Based on FY 2025-26 slabs for salaried residents under 60. Includes 87A rebate, new-regime marginal relief and 4% cess. Surcharge is ignored. This is an estimate, not tax advice.</footer>
-</section>
-
-<footer>Made by the <a href="https://www.youtube.com/@RupayaFiles">Rupaya Files</a> channel. Watch it for the stories behind the numbers.</footer>
-</main>
-<script>
-const $=id=>document.getElementById(id);
-const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
-const box=(t,v,s='')=>`<div><small>${t}</small><b>${v}</b><small>${s}</small></div>`;
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('nav button,section').forEach(e=>e.classList.remove('on'));
-  b.classList.add('on');$(b.dataset.t).classList.add('on');});
-
-function sip(){
-  let amt=+$('s_amt').value,r=+$('s_r').value/1200,y=+$('s_y').value,up=+$('s_up').value/100,fv=0,inv=0;
-  for(let m=0;m<y*12;m++){if(m&&m%12==0)amt*=1+up;fv=(fv+amt)*(1+r);inv+=amt;}
-  $('s_out').innerHTML=box('Invested',inr(inv))+box('Gains',inr(fv-inv))+box('Final value',inr(fv),(fv/inv).toFixed(1)+'× your money');
-}
-function emi(){
-  const p=+$('e_p').value,r=+$('e_r').value/1200,n=+$('e_y').value*12;
-  const e=r?p*r*(1+r)**n/((1+r)**n-1):p/n;
-  $('e_out').innerHTML=box('Monthly EMI',inr(e))+box('Total interest',inr(e*n-p))+box('Total paid',inr(e*n),'Interest is '+((e*n-p)/p*100).toFixed(0)+'% of the loan');
-}
-function slab(x,s){let t=0,prev=0;for(const[lim,rt]of s){if(x>prev)t+=(Math.min(x,lim)-prev)*rt;prev=lim;}return t;}
-function tax(){
-  const g=+$('t_inc').value,d=+$('t_ded').value;
-  const nI=Math.max(0,g-75000);
-  let n=slab(nI,[[4e5,0],[8e5,.05],[12e5,.1],[16e5,.15],[2e6,.2],[24e5,.25],[Infinity,.3]]);
-  if(nI<=12e5)n=0;else n=Math.min(n,nI-12e5);
-  const oI=Math.max(0,g-50000-d);
-  let o=slab(oI,[[25e4,0],[5e5,.05],[1e6,.2],[Infinity,.3]]);
-  if(oI<=5e5)o=0;
-  n*=1.04;o*=1.04;
-  $('t_out').innerHTML=box('New regime tax',inr(n),'Taxable '+inr(nI))+box('Old regime tax',inr(o),'Taxable '+inr(oI));
-  $('t_win').textContent=Math.abs(n-o)<1?'Both regimes come out the same.':(n<o?'New':'Old')+' regime saves you '+inr(Math.abs(n-o))+' a year.';
-}
-document.querySelectorAll('input').forEach(i=>i.oninput=()=>{sip();emi();tax();});
-sip();emi();tax();
-</script>
-</body>
+<body><p>Taking you to <a href="blr/">Ten Rupee Estates</a>…</p></body>
 </html>
