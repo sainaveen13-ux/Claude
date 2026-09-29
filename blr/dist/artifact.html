@@ -10,16 +10,16 @@
 :root{
   --bg:#f2f4f8; --surface:#ffffff; --fg:#0d1b2a; --mut:#5a6577; --line:#dde2ea;
   --gold:#b8862b; --gold-soft:#f3e6c8; --alert:#e5383b; --ok:#2b8a3e; --wa:#25d366;
-  --map-bg:#e6ebf2; --ward:#ffffff; --ward-alt:#f4f6fa; --ward-line:#c3ccd9; --grid:rgba(13,27,42,.14); --label:#0d1b2a; --halo:rgba(255,255,255,.9);
+  --map-bg:#e6ebf2; --ward:#ffffff; --ward-alt:#f4f6fa; --ward-line:#c3ccd9; --grid:rgba(13,27,42,.14); --label:#0d1b2a; --halo:#ffffff; --pill-bg:#0d1b2a; --pill-fg:#ffffff;
   --f-display:"Unbounded","Arial Black",system-ui,sans-serif; --f-body:"Manrope",system-ui,-apple-system,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#08121e; --surface:#0f1d2e; --fg:#eef2f7; --mut:#93a1b5; --line:#1f3048;
-  --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#e8eef6; --halo:rgba(8,18,30,.85); color-scheme:dark}}
+  --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#ffffff; --halo:#050b13; --pill-bg:#f2d48a; --pill-fg:#0d1b2a; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#08121e; --surface:#0f1d2e; --fg:#eef2f7; --mut:#93a1b5; --line:#1f3048;
-  --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#e8eef6; --halo:rgba(8,18,30,.85); color-scheme:dark}
+  --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#ffffff; --halo:#050b13; --pill-bg:#f2d48a; --pill-fg:#0d1b2a; color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body)}
@@ -286,7 +286,7 @@ cells:"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 <script>
 // ================= CONFIG: fill in before launch =================
 const CONFIG = {
-  upiId:    "yourname@upi",                 // your UPI ID
+  upiId:    "",                             // your UPI ID. Leave empty until set: no QR or pay link is shown while it is empty
   payee:    "Ten Rupee Estates",
   whatsapp: "919999999999",                 // order inbox, country code first, no +
   offerEnds: "2026-10-11T06:00:00+05:30",   // Navratri Ghatasthapana
@@ -417,7 +417,7 @@ const cv = $("cv"), ctx = cv.getContext("2d"), box = $("mapBox");
 let view = { s: 1, tx: 0, ty: 0 }, W = 0, H = 0, dpr = 1, raf = 0;
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 let COL = {};
-function readColors() { for (const k of ["map-bg","ward","ward-alt","ward-line","grid","label","halo","gold","alert","fg"]) COL[k] = css("--" + k); }
+function readColors() { for (const k of ["map-bg","ward","ward-alt","ward-line","grid","label","halo","gold","alert","fg","pill-bg","pill-fg"]) COL[k] = css("--" + k); }
 function fit() { const bw = G.cols * CW, bh = G.rows * CH, s = Math.min(W / bw, H / bh) * 1.02; view = { s, tx: (W - bw * s) / 2, ty: (H - bh * s) / 2 }; }
 function resize() { const r = box.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; if (!view.init) { fit(); view.init = 1; } draw(); }
 const minS = () => Math.min(W / (G.cols * CW), H / (G.rows * CH)) * .9, maxS = 480;
@@ -455,15 +455,17 @@ function render() {
   // labels in screen space
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.textAlign = "center"; ctx.textBaseline = "middle";
   const boxes = [];
-  const label = (t, x, y, font, color, force) => {
+  const label = (t, x, y, font, pill) => {
     const [px, py] = scr(x, y); if (px < -80 || py < -20 || px > W + 80 || py > H + 20) return;
-    ctx.font = font; const w = ctx.measureText(t).width + 8, b = [px - w / 2, py - 9, w, 18];
-    if (!force && boxes.some(o => b[0] < o[0] + o[2] && b[0] + b[2] > o[0] && b[1] < o[1] + o[3] && b[1] + b[3] > o[1])) return;
-    boxes.push(b); ctx.lineWidth = 3.5; ctx.strokeStyle = COL.halo; ctx.strokeText(t, px, py); ctx.fillStyle = color; ctx.fillText(t, px, py);
+    ctx.font = font; const tw = ctx.measureText(t).width, w = tw + (pill ? 14 : 8), h = pill ? 20 : 18, b = [px - w / 2, py - h / 2, w, h];
+    if (boxes.some(o => b[0] < o[0] + o[2] && b[0] + b[2] > o[0] && b[1] < o[1] + o[3] && b[1] + b[3] > o[1])) return;
+    boxes.push(b);
+    if (pill) { ctx.fillStyle = COL["pill-bg"]; ctx.beginPath(); ctx.roundRect(b[0], b[1], w, h, 6); ctx.fill(); ctx.fillStyle = COL["pill-fg"]; ctx.fillText(t, px, py + 1); return; }
+    ctx.lineJoin = "round"; ctx.lineWidth = 5; ctx.strokeStyle = COL.halo; ctx.strokeText(t, px, py); ctx.fillStyle = COL.label; ctx.fillText(t, px, py);
   };
-  if (s > 4) LANDMARKS.forEach(l => label(l.t, l.x, l.y, "600 12px Manrope,sans-serif", COL.label));
-  AREAS.forEach(a => { if (placeOf(Math.floor(a.y / CH), Math.floor(a.x / CW))) label(a.name.toUpperCase(), a.x, a.y, `800 ${s > 30 ? 13 : 11}px Manrope,sans-serif`, COL.label); });
-  if (s > 22) WARDS.forEach(w => label(w.name, w.cx, w.cy, "500 11px Manrope,sans-serif", COL.label));
+  AREAS.forEach(a => { if (placeOf(Math.floor(a.y / CH), Math.floor(a.x / CW))) label(a.name.toUpperCase(), a.x, a.y, `800 ${s > 30 ? 12 : 11}px Manrope,sans-serif`, true); });
+  if (s > 4) LANDMARKS.forEach(l => label(l.t, l.x, l.y, "700 12px Manrope,sans-serif"));
+  if (s > 22) WARDS.forEach(w => label(w.name, w.cx, w.cy, "600 11px Manrope,sans-serif"));
   if (cellPx >= 26) {
     ctx.textAlign = "left"; ctx.font = "700 12px Manrope,sans-serif";
     for (const p of plots) { if (filter && p.cat !== filter) continue; const [r, c] = p.cells[0], [px, py] = scr(c * CW, r * CH); if (px > W || py > H || px < -300 || py < -40) continue;
@@ -556,10 +558,18 @@ $("close1").onclick = $("close3").onclick = () => $("dlg").close();
 $("back2").onclick = () => step(1);
 $("toPay").onclick = () => {
   if (!$("fName").value.trim() || !$("fMsg").value.trim()) { $("err1").textContent = "Add your name and your rant to continue."; return; }
-  const upi = `upi://pay?pa=${encodeURIComponent(CONFIG.upiId)}&pn=${encodeURIComponent(CONFIG.payee)}&am=${order.amt}&cu=INR&tn=${order.id}`;
   $("payMeta").textContent = `${inr(order.amt)} · Order ${order.id}. No stamp duty, no khata fee, no "chai-pani".`;
-  $("upiTxt").textContent = CONFIG.upiId; $("upiLink").href = upi; $("qr").innerHTML = "";
-  if (window.QRCode) new QRCode($("qr"), { text: upi, width: 168, height: 168 }); else $("qr").textContent = "Scan unavailable. Use the UPI ID below.";
+  $("qr").innerHTML = "";
+  const live = /^[\w.\-]{2,256}@[a-zA-Z]{2,64}$/.test(CONFIG.upiId);
+  $("upiLink").hidden = $("upiCopy").hidden = !live;
+  if (!live) {
+    $("qr").innerHTML = '<p style="color:#0d1b2a;margin:0;max-width:220px;text-align:center;font-weight:700">Test mode: payments are not set up yet. Enter any 12-digit number below to preview the rest.</p>';
+    $("upiTxt").textContent = "";
+  } else {
+    const upi = `upi://pay?pa=${encodeURIComponent(CONFIG.upiId)}&pn=${encodeURIComponent(CONFIG.payee)}&am=${order.amt}&cu=INR&tn=${order.id}`;
+    $("upiTxt").textContent = CONFIG.upiId; $("upiLink").href = upi;
+    if (window.QRCode) new QRCode($("qr"), { text: upi, width: 168, height: 168 }); else $("qr").textContent = "Scan unavailable. Use the UPI ID below.";
+  }
   $("err2").textContent = ""; refreshSend(); step(2);
 };
 $("upiCopy").onclick = () => navigator.clipboard?.writeText(CONFIG.upiId).then(() => $("upiCopy").textContent = "Copied", () => {});
