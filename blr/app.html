@@ -239,7 +239,7 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
   </section>
 
   <footer>
-    Ten Rupee Estates is a satire project by <a href="https://www.youtube.com/@RupayaFiles" target="_blank" rel="noopener">Rupaya Files</a>. Plots are cells on a map, not real property, and no approval, title or ownership is offered or implied. Ward boundaries © BBMP, published by DataMeet under CC BY 4.0. Landmark positions are approximate.
+    Ten Rupee Estates is a satire project by <a href="https://www.youtube.com/channel/UCM7V8bVh9bpH1moXSati8Hw" target="_blank" rel="noopener">Rupaya Files</a>. Plots are cells on a map, not real property, and no approval, title or ownership is offered or implied. Ward boundaries © BBMP, published by DataMeet under CC BY 4.0. Landmark positions are approximate.
   </footer>
 </div>
 
@@ -264,13 +264,15 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
     <div class="qr" id="qr"></div>
     <div class="upi"><span id="upiTxt"></span><button class="btn sm" id="upiCopy">Copy UPI ID</button></div>
     <div class="row" style="justify-content:center"><a class="btn gold sm" id="upiLink" href="#">Open UPI app</a></div>
-    <label for="fUtr">UPI transaction ID (UTR)</label><input class="field" id="fUtr" inputmode="numeric" maxlength="22" placeholder="12-digit UTR from your UPI app">
-    <p class="err" id="err2"></p>
-    <div class="row"><a class="btn wa" id="sendBtn" target="_blank" rel="noopener" href="#">Send order on WhatsApp</a><button class="btn ghost" id="back2">Back</button></div>
+    <p class="small" style="font-size:13px;color:var(--mut);margin:12px 0 0">Scanning the code fills in the amount and your order ID. Paying to the UPI ID by hand? Type <b id="noteId" style="font-family:var(--f-mono)"></b> in the payment note so we can match it.</p>
+    <div class="row"><button class="btn gold" id="paidBtn">I've paid, next step</button><button class="btn ghost" id="back2">Back</button></div>
   </div>
   <div class="step" id="st3">
-    <h3>Congratulations, landowner</h3>
-    <p style="margin:6px 0 0">Your order is in. Your plot goes live within 24 hours. Here is your allotment letter. Long-press or right-click it to save.</p>
+    <h3>Last step: register it on YouTube</h3>
+    <p style="margin:6px 0 0">Copy your order and post it as a comment on <b>Rupaya Files</b>. Your plot goes live within 24 hours of the payment matching your order ID.</p>
+    <textarea class="field" id="orderTxt" rows="6" readonly style="margin-top:12px;font-family:var(--f-mono);font-size:12px;resize:vertical"></textarea>
+    <div class="row"><button class="btn gold sm" id="copyOrder">Copy order</button><a class="btn sm" id="ytBtn" target="_blank" rel="noopener" href="#">Open Rupaya Files ↗</a></div>
+    <p style="margin:16px 0 0">Meanwhile, here is your allotment letter. Long-press or right-click it to save.</p>
     <img id="letterImg" alt="Your Ten Rupee Estates allotment letter">
     <div class="row"><a class="btn gold sm" id="letterDl" download="ten-rupee-estates-allotment.png">Download</a><a class="btn wa sm" id="letterShare" target="_blank" rel="noopener">Share on WhatsApp</a><button class="btn ghost sm" id="close3">Done</button></div>
   </div>
@@ -282,9 +284,10 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
 <script>
 // ================= CONFIG: fill in before launch =================
 const CONFIG = {
-  upiId:    "",                             // your UPI ID. Leave empty until set: no QR or pay link is shown while it is empty
+  upiId:    "",                             // merchant UPI ID that receives payments. Empty = test mode (no QR or pay link)
   payee:    "Ten Rupee Estates",
-  whatsapp: "919999999999",                 // order inbox, country code first, no +
+  orderUrl: "https://www.youtube.com/channel/UCM7V8bVh9bpH1moXSati8Hw",   // where buyers post their order as a comment. Best: a pinned "order desk" video
+  channelUrl: "https://www.youtube.com/channel/UCM7V8bVh9bpH1moXSati8Hw",
   offerEnds: "2026-10-11T06:00:00+05:30",   // Navratri Ghatasthapana
   priceOffer: 10, priceAfter: 15,           // ₹ per cell before and after the offer
   maxCells: 200,
@@ -400,6 +403,7 @@ function loadPlots(list) {
   for (const p0 of list) {
     const p = { ...p0 };
     if (p.at) { const [x, y] = toXY(p.at[0], p.at[1]), o = cellAt(x, y); p.cells = []; for (let i = 0; i < (p.h || 1); i++) for (let j = 0; j < (p.w || 1); j++) p.cells.push([o.r + i, o.c + j]); }
+    if (p.ids) p.cells = String(p.ids).split(",").map(n => [Math.floor(+n / G.cols), +n % G.cols]);
     p.cells = (p.cells || []).filter(([r, c]) => wardOf(r, c) >= 0 && !owned.has(r * 1000 + c));
     if (!p.cells.length) continue;
     p.place = placeOf(p.cells[0][0], p.cells[0][1]);
@@ -566,20 +570,20 @@ $("toPay").onclick = () => {
     $("upiTxt").textContent = CONFIG.upiId; $("upiLink").href = upi;
     if (window.QRCode) new QRCode($("qr"), { text: upi, width: 168, height: 168 }); else $("qr").textContent = "Scan unavailable. Use the UPI ID below.";
   }
-  $("err2").textContent = ""; refreshSend(); step(2);
+  $("noteId").textContent = order.id; step(2);
 };
 $("upiCopy").onclick = () => navigator.clipboard?.writeText(CONFIG.upiId).then(() => $("upiCopy").textContent = "Copied", () => {});
-function orderData() { return { name: $("fName").value.trim(), cat: $("fCat").value, msg: $("fMsg").value.trim(), color: paint, url: $("fUrl").value.trim(), utr: $("fUtr").value.trim() }; }
-function refreshSend() {
-  const o = { ...order, ...orderData() };
-  const json = JSON.stringify({ cells: o.cells, name: o.name, cat: o.cat, msg: o.msg, color: o.color, url: o.url });
-  $("sendBtn").href = waLink(`🏗️ TEN RUPEE ESTATES · ORDER ${o.id}\nPlot ${o.plot} · ${o.place} · ${o.cells.length} cells\nAmount: ₹${o.amt}\nUTR: ${o.utr}\nName: ${o.name}\nRant: ${o.msg}\n\nDATA ${json}`, CONFIG.whatsapp);
+function orderData() { return { name: $("fName").value.trim(), cat: $("fCat").value, msg: $("fMsg").value.trim(), color: paint, url: $("fUrl").value.trim() }; }
+// The comment doubles as the order record: one line per field, cell ids at the end so it can be pasted into plots.json.
+function orderComment(o) {
+  return `🏗️ #TenRupeeEstates order ${o.id}\nPlot ${o.plot} · ${o.place} · ${o.cells.length} cell${o.cells.length > 1 ? "s" : ""} · ₹${o.amt}\n${CATS[o.cat].e} "${o.msg}"\nOwner: ${o.name}\nColour: ${o.color}${o.url ? "\nLink: " + o.url : ""}\nCells: ${o.cells.map(([r, c]) => r * G.cols + c).join(",")}`;
 }
-$("fUtr").addEventListener("input", refreshSend);
-$("sendBtn").addEventListener("click", e => {
-  if (!/^\w{10,22}$/.test($("fUtr").value.trim())) { e.preventDefault(); $("err2").textContent = "Enter the UTR from your UPI app so we can match your payment."; return; }
-  const o = { ...order, ...orderData() }; makeLetter(o); step(3); cart.clear(); updateCart(); draw();
-});
+$("paidBtn").onclick = () => {
+  const o = { ...order, ...orderData() };
+  $("orderTxt").value = orderComment(o); $("ytBtn").href = CONFIG.orderUrl; $("copyOrder").textContent = "Copy order";
+  makeLetter(o); step(3); cart.clear(); updateCart(); draw();
+};
+$("copyOrder").onclick = () => { const t = $("orderTxt"); navigator.clipboard?.writeText(t.value).then(() => $("copyOrder").textContent = "Copied ✓", () => { t.select(); }); };
 
 // ---------- allotment letter ----------
 function makeLetter(o) {
