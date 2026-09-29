@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apni Deewar · अपनी दीवार</title>
+<meta name="description" content="Ghar nahi le sakte? Deewar ki ek eent le lo. 10,000 eenton ki deewar, ek eent ₹101 shagun mein. Apna naam, apni mannat, apni bhadaas, hamesha ke liye.">
+<meta property="og:title" content="Ghar nahi, toh Deewar sahi 🧱">
+<meta property="og:description" content="Bharat ki pehli digital deewar. Ek eent, ₹101 shagun. Apna naam likhwao, Deewardar bano.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Mukta:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff6e5;--panel:#fffdf7;--fg:#2b1a10;--mut:#7a5f4c;--acc:#d9480f;--acc2:#0b7a4b;--line:#e8d6bb;--brick:#b5532f;--mortar:#e9dcc6;--pink:#e64980}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1a120d;--panel:#241913;--fg:#fbeee0;--mut:#c2a58c;--line:#3d2b20;--mortar:#2e2019}}
+:root[data-theme="dark"]{--bg:#1a120d;--panel:#241913;--fg:#fbeee0;--mut:#c2a58c;--line:#3d2b20;--mortar:#2e2019}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 Mukta,system-ui,sans-serif}
+.deco{height:10px;background:repeating-linear-gradient(90deg,#d9480f 0 20px,#f59f00 20px 40px,#0b7a4b 40px 60px,#e64980 60px 80px,#1971c2 80px 100px)}
+header{max-width:1100px;margin:auto;padding:22px 16px 6px;text-align:center}
+h1{font-family:"Yatra One",serif;font-weight:400;font-size:clamp(34px,8vw,68px);line-height:1;margin:0;color:var(--acc);text-shadow:3px 3px 0 #f59f0055}
+h1 small{display:block;font-size:.38em;color:var(--fg);margin-top:6px}
+.hook{font-size:clamp(18px,3.5vw,26px);font-weight:800;margin:14px 0 2px}
+.hook b{color:var(--acc2)}
+.sub{color:var(--mut);margin:0 0 12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;max-width:760px;margin:10px auto}
+.stat{background:var(--panel);border:2px dashed var(--line);border-radius:12px;padding:8px}
+.stat b{display:block;font-size:22px;font-weight:800;color:var(--acc)}
+.stat small{color:var(--mut)}
+main{max-width:1100px;margin:auto;padding:10px 16px}
+.chips,.tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.chip,button,.btn{font:inherit;font-weight:600;padding:7px 13px;border-radius:99px;border:2px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer;text-decoration:none;display:inline-block}
+.chip.on{border-color:var(--acc);background:var(--acc);color:#fff}
+button.pri,.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:800}
+button.wa,.btn.wa{background:#25d366;border-color:#25d366;color:#08331a;font-weight:800}
+button:disabled{opacity:.4;cursor:not-allowed}
+.wrap{overflow:auto;border:6px solid var(--brick);border-radius:6px;background:var(--mortar);max-height:75vh;box-shadow:0 8px 0 #0002}
+canvas{display:block;image-rendering:pixelated;cursor:crosshair;width:100%}
+canvas.sel{touch-action:none}
+#selInfo{font-weight:700}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:18px}
+.card h3{font-family:"Yatra One",serif;font-weight:400;font-size:24px;margin:0 0 6px;color:var(--acc)}
+.feed div{padding:8px 0;border-bottom:1px dashed var(--line)}
+.feed small,.lb small{color:var(--mut)}
+.lb div{display:flex;justify-content:space-between;padding:4px 0}
+.lb i{display:block;height:6px;background:var(--acc);border-radius:9px;margin-top:2px}
+label{display:block;font-size:14px;color:var(--mut);margin-top:10px;font-weight:600}
+input,select{width:100%;padding:9px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--fg);font:inherit}
+dialog{background:var(--panel);color:var(--fg);border:3px solid var(--acc);border-radius:18px;max-width:440px;width:calc(100% - 24px);padding:20px;max-height:92vh}
+dialog::backdrop{background:#000b}
+dialog h3{font-family:"Yatra One",serif;font-weight:400;font-size:26px;margin:0;color:var(--acc)}
+#qr{background:#fff;padding:10px;border-radius:10px;width:max-content;margin:10px auto}
+.paints{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.paints span{width:30px;height:30px;border-radius:6px;cursor:pointer;border:3px solid transparent}
+.paints span.on{border-color:var(--fg)}
+#preview{margin-top:10px;padding:10px;border-radius:6px;color:#fff;font-weight:800;text-align:center;font-family:"Yatra One",serif}
+#cert{width:100%;border-radius:10px;margin-top:10px}
+#story{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:min(420px,calc(100% - 32px));width:100%;background:var(--panel);border:3px solid var(--acc);border-radius:16px;padding:14px 16px;display:none;z-index:9;box-shadow:0 10px 40px #0005}
+#story .x{position:absolute;right:10px;top:6px;border:0;background:none;font-size:20px;padding:0}
+.step{display:none}.step.on{display:block}
+.rules{font-size:13px;color:var(--mut)}
+footer{text-align:center;color:var(--mut);font-size:14px;padding:30px 16px}
+a{color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="deco"></div>
+<header>
+  <h1>अपनी दीवार<small>Apni Deewar</small></h1>
+  <p class="hook">Ghar nahi le sakte? <b>Deewar ki ek eent le lo.</b> 🧱</p>
+  <p class="sub">10,000 eenton ki ek deewar. Ek eent, ₹101 shagun. Apna naam, apni mannat, apni bhadaas, hamesha ke liye.</p>
+  <div class="stats">
+    <div class="stat"><b id="sDeewardar">0</b><small>Deewardar bane</small></div>
+    <div class="stat"><b id="sLeft">10,000</b><small>eent baaki</small></div>
+    <div class="stat"><b id="sPrice">₹101</b><small id="sNext">abhi ka rate</small></div>
+  </div>
+</header>
+
+<main>
+  <div class="chips" id="chips"></div>
+  <div class="tools">
+    <button id="zoomBtn">🔍 Zoom</button>
+    <button id="modeBtn">✋ Scroll karo</button>
+    <button id="randBtn">🎲 Koi bhi eent padho</button>
+  </div>
+  <div class="tools"><span id="selInfo">Khaali deewar pe ungli ghumao, apni eent chuno 👆</span>
+    <button class="pri" id="buyBtn" disabled>Yeh eent meri! 🧱</button></div>
+  <div class="wrap" id="wrap"><canvas id="c" width="2000" height="1000"></canvas></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Deewar pe kya likha hai? 👀</h3>
+      <div class="feed" id="feed"><small>Abhi toh deewar khaali hai. Pehli eent aapki ho sakti hai. Itihaas mein naam aayega.</small></div>
+    </div>
+    <div class="card">
+      <h3>Shehar ki izzat 🏆</h3>
+      <p style="margin:0 0 8px;color:var(--mut)">Kiske shehar ke paas zyada deewar hai?</p>
+      <div class="lb" id="lb"><small>Koi shehar abhi tak maidan mein nahi. Aapka shehar pehla ho?</small></div>
+      <p style="margin-bottom:0"><button class="wa" id="cityShare">Shehar walon ko lalkaaro 📣</button></p>
+    </div>
+    <div class="card">
+      <h3>Aapki lucky eent 🔮</h3>
+      <p style="margin:0;color:var(--mut)">Naam aur janamdin daalo. Kismat batayegi kaunsi eent aapke liye bani hai.</p>
+      <label>Naam</label><input id="lName" placeholder="Bunty">
+      <label>Janamdin</label><input id="lDob" type="date">
+      <p><button class="pri" id="luckyBtn">Kismat dekho</button></p>
+      <div id="luckyOut"></div>
+    </div>
+    <div class="card">
+      <h3>Kaise? 🤔</h3>
+      <ol style="padding-left:20px;margin:0">
+        <li>Deewar pe khaali jagah chuno. Ek eent ka rate abhi ₹<span class="rate">101</span> hai.</li>
+        <li>Rang aur apna sandesh chuno. Badhai, mannat, pyaar, bhadaas, dukaan, kuch bhi.</li>
+        <li>UPI se shagun do, phir WhatsApp pe order bhejo.</li>
+        <li>24 ghante mein deewar pe aapka naam. Aur mile ga <b>Deewardar Certificate</b> 📜</li>
+      </ol>
+      <p class="rules">Mana hai: politics, dharm pe nafrat, gaali, betting, adult cheezein. Aisa sandesh aaya toh paise poore wapas.</p>
+    </div>
+  </div>
+</main>
+
+<div id="story"><button class="x" id="storyX">✕</button><div id="storyBody"></div></div>
+
+<dialog id="dlg">
+  <div class="step on" id="st1">
+    <h3>Apni eent likhwao</h3>
+    <p id="dMeta" style="color:var(--mut);margin:2px 0"></p>
+    <label>Aapka naam</label><input id="fName" maxlength="24" placeholder="Bunty Sharma">
+    <label>Shehar</label><input id="fCity" maxlength="20" placeholder="Kanpur">
+    <label>Kis liye?</label><select id="fKind"></select>
+    <label>Deewar pe kya likhein? (max 40 akshar)</label><input id="fMsg" maxlength="40" placeholder="Papa, aapka beta ab property owner hai">
+    <label>Rang chuno</label><div class="paints" id="paints"></div>
+    <div id="preview">Aapka sandesh</div>
+    <label>Link (optional: dukaan, Insta, YouTube)</label><input id="fUrl" placeholder="https://">
+    <div class="tools"><button class="pri" id="toPay">Aage badho →</button><button id="close1">Rehne do</button></div>
+  </div>
+  <div class="step" id="st2">
+    <h3>Shagun do 🪔</h3>
+    <p style="text-align:center;margin:4px 0">₹<b id="dAmt"></b> · Order <b id="dId"></b></p>
+    <div id="qr"></div>
+    <p style="text-align:center;margin:0"><a class="btn pri" id="upiLink" href="#">UPI app se pay karo</a></p>
+    <label>Payment ke baad UTR / Transaction ID</label><input id="fUtr" placeholder="12 ank ka UTR number">
+    <div class="tools"><button class="wa" id="sendBtn">WhatsApp pe order bhejo ✅</button><button id="back2">← Wapas</button></div>
+  </div>
+  <div class="step" id="st3">
+    <h3>Badhai ho, Deewardar! 🎉</h3>
+    <p style="margin:4px 0">Order mil gaya. 24 ghante mein aapki eent deewar pe hogi. Tab tak certificate dikhao sabko:</p>
+    <img id="cert" alt="Deewardar certificate">
+    <div class="tools"><a class="btn pri" id="certDl" download="deewardar-certificate.png">Download karo</a><button class="wa" id="certShare">WhatsApp pe dikhao</button></div>
+    <div class="tools"><button id="close3">Band karo</button></div>
+  </div>
+</dialog>
+
+<footer>Ek jugaad experiment by <a href="https://www.youtube.com/@RupayaFiles">Rupaya Files</a>. Deewar ka poora safar YouTube pe dekho.<br>Deewardar certificate sirf masti ke liye hai. Yeh asli property nahi hai. Emotional property hai. 🧱</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// ===== CONFIG: launch se pehle bharo =====
+const CONFIG = {
+  upiId:    "yourname@upi",      // aapka UPI ID
+  payee:    "Apni Deewar",
+  whatsapp: "919999999999",      // orders ke liye WhatsApp number, country code ke saath, bina +
+  site:     location.href.split('#')[0]
+};
+// Rate badhta hai jaise deewar bharti hai (shagun wale ank)
+const TIERS = [[1000,101],[3000,151],[6000,251],[9000,501],[10000,1100]];
+// =========================================
+
+const COLS=100, ROWS=100, EW=20, EH=10;
+const KINDS = {
+  badhai:  {e:'🪔', t:'Badhai / Shagun', c:'#f59f00'},
+  mannat:  {e:'🙏', t:'Mannat', c:'#e8590c'},
+  pyaar:   {e:'❤️', t:'Pyaar / Sorry', c:'#e64980'},
+  yaad:    {e:'🌼', t:'Yaad mein', c:'#f2f2f2'},
+  bhadaas: {e:'😤', t:'Bhadaas', c:'#5f3dc4'},
+  dukaan:  {e:'🏪', t:'Dukaan / Business', c:'#1971c2'},
+  tola:    {e:'🏏', t:'Team / College / Mohalla', c:'#0b7a4b'}
+};
+const PAINTS = ['#d9480f','#f59f00','#e64980','#0b7a4b','#1971c2','#5f3dc4','#212529','#f2f2f2'];
+const $ = id => document.getElementById(id);
+const inr = n => '₹' + n.toLocaleString('en-IN');
+const esc = s => String(s||'').replace(/[<>&"]/g, m => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[m]));
+const c = $('c'), ctx = c.getContext('2d');
+let bricks = [], taken = new Map(), sel = null, drag = null, selectMode = true, filter = null, zoom = 0, paint = PAINTS[0], order = null;
+
+const eentNo = (x,y) => y*COLS + x + 1;
+function soldCount(){ return bricks.filter(b=>!b.house).reduce((s,b)=>s+b.w*b.h,0); }
+function price(){ const s = soldCount(); for (const [lim,p] of TIERS) if (s < lim) return {p, left: lim - s, next: (TIERS.find(t=>t[0]>lim)||[])[1]}; return {p: TIERS.at(-1)[1], left: 0}; }
+function contrast(hex){ const n=parseInt(hex.slice(1),16); return ((n>>16)*299+((n>>8)&255)*587+(n&255)*114)/1000 > 150 ? '#2b1a10' : '#fff'; }
+
+function draw(){
+  const cs = getComputedStyle(document.documentElement);
+  const mortar = cs.getPropertyValue('--mortar').trim();
+  ctx.fillStyle = mortar; ctx.fillRect(0,0,2000,1000);
+  // empty bricks: faded terracotta
+  for (let y=0;y<ROWS;y++) for (let x=0;x<COLS;x++){
+    if (taken.has(x+','+y)) continue;
+    ctx.fillStyle = ((x*7+y*13)%5===0) ? '#c4623a33' : '#b5532f22';
+    ctx.fillRect(x*EW+1, y*EH+1, EW-2, EH-2);
+  }
+  for (const b of bricks){
+    const dim = filter && b.kind !== filter;
+    ctx.globalAlpha = dim ? .15 : 1;
+    ctx.fillStyle = b.color || KINDS[b.kind]?.c || '#d9480f';
+    ctx.fillRect(b.x*EW+1, b.y*EH+1, b.w*EW-2, b.h*EH-2);
+    const txt = b.house ? b.msg : (KINDS[b.kind]?.e||'') + ' ' + (b.msg||b.name);
+    const fs = Math.min(b.h*EH*0.6, 40);
+    if (fs >= 6){
+      ctx.fillStyle = contrast(ctx.fillStyle); ctx.font = `${fs}px "Yatra One", serif`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(txt, b.x*EW + b.w*EW/2, b.y*EH + b.h*EH/2 + 1, b.w*EW - 6);
+    }
+  }
+  ctx.globalAlpha = 1;
+  if (sel){
+    const ok = selOk();
+    ctx.fillStyle = ok ? '#0b7a4b99' : '#e0303099'; ctx.fillRect(sel.x*EW, sel.y*EH, sel.w*EW, sel.h*EH);
+    ctx.strokeStyle = ok ? '#2bff8a' : '#ff3030'; ctx.lineWidth = 3; ctx.strokeRect(sel.x*EW+1.5, sel.y*EH+1.5, sel.w*EW-3, sel.h*EH-3);
+  }
+}
+function selOk(){ if(!sel) return false; for(let x=sel.x;x<sel.x+sel.w;x++) for(let y=sel.y;y<sel.y+sel.h;y++) if(taken.has(x+','+y)) return false; return true; }
+function cell(e){ const r=c.getBoundingClientRect(); return {x:Math.max(0,Math.min(COLS-1,Math.floor((e.clientX-r.left)/r.width*COLS))), y:Math.max(0,Math.min(ROWS-1,Math.floor((e.clientY-r.top)/r.height*ROWS)))}; }
+function brickAt(p){ return taken.get(p.x+','+p.y); }
+function updateSel(){
+  if(!sel){ $('selInfo').textContent='Khaali deewar pe ungli ghumao, apni eent chuno 👆'; $('buyBtn').disabled=true; return; }
+  const n=sel.w*sel.h, ok=selOk();
+  $('selInfo').textContent = ok ? `${n} eent · Eent No. ${eentNo(sel.x,sel.y)} · ${inr(n*price().p)}` : 'Yeh jagah pehle se kisi ki hai 😅';
+  $('buyBtn').disabled=!ok;
+}
+c.addEventListener('pointerdown', e=>{ if(!selectMode) return; drag=cell(e); drag.moved=false; });
+c.addEventListener('pointermove', e=>{
+  if(!drag) return; const p=cell(e);
+  if(!drag.moved && (p.x!==drag.x||p.y!==drag.y)){ drag.moved=true; c.setPointerCapture(e.pointerId); }
+  if(drag.moved){ sel={x:Math.min(p.x,drag.x),y:Math.min(p.y,drag.y),w:Math.abs(p.x-drag.x)+1,h:Math.abs(p.y-drag.y)+1}; updateSel(); draw(); }
+});
+c.addEventListener('pointerup', e=>{
+  const p=cell(e), wasDrag = drag && drag.moved; drag=null;
+  if (wasDrag) return;
+  const b=brickAt(p);
+  if (b) { showStory(b); return; }
+  if (selectMode){ sel={x:p.x,y:p.y,w:1,h:1}; updateSel(); draw(); }
+});
+
+function showStory(b){
+  if (b.house){ toast(b.story || b.msg); return; }
+  const k=KINDS[b.kind]||{};
+  const share = `Dekho ${b.name} (${b.city}) ne Apni Deewar pe likhwaya: "${b.msg}" 🧱\nGhar nahi, toh deewar sahi! Tum bhi eent lo: ${CONFIG.site}`;
+  $('storyBody').innerHTML = `<div style="font-size:28px">${k.e||'🧱'}</div>
+    <b style="font-size:20px">"${esc(b.msg)}"</b><br>
+    <span>${esc(b.name)}, ${esc(b.city)}</span><br>
+    <small style="color:var(--mut)">${esc(k.t||'')} · Eent No. ${eentNo(b.x,b.y)}${b.w*b.h>1?' (+'+(b.w*b.h-1)+')':''}</small>
+    <div class="tools" style="justify-content:flex-start">
+      <a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(share)}">Share karo</a>
+      ${b.url?`<a class="btn" target="_blank" rel="noopener nofollow" href="${esc(b.url)}">Link kholo ↗</a>`:''}
+    </div>`;
+  $('story').style.display='block';
+}
+function toast(msg){ $('storyBody').innerHTML = `<b style="font-size:18px">${esc(msg)}</b>`; $('story').style.display='block'; }
+$('storyX').onclick=()=>$('story').style.display='none';
+
+$('modeBtn').onclick=()=>{ selectMode=!selectMode; c.classList.toggle('sel',selectMode); $('modeBtn').textContent = selectMode?'✋ Scroll karo':'🎯 Eent chuno'; };
+c.classList.add('sel');
+const ZOOMS=['100%','200%','400%'];
+$('zoomBtn').onclick=()=>{ zoom=(zoom+1)%ZOOMS.length; c.style.width=ZOOMS[zoom]; $('zoomBtn').textContent = zoom? `🔍 ${zoom*2}x`:'🔍 Zoom'; };
+$('randBtn').onclick=()=>{ const real=bricks.filter(b=>!b.house); if(!real.length) return toast('Abhi koi kahani nahi. Pehli kahani aapki likhi jaayegi ✍️'); showStory(real[Math.floor(Math.random()*real.length)]); };
+
+// category filter chips
+$('chips').innerHTML = '<button class="chip on" data-k="">Sab</button>' + Object.entries(KINDS).map(([k,v])=>`<button class="chip" data-k="${k}">${v.e} ${v.t}</button>`).join('');
+$('chips').onclick=e=>{ const b=e.target.closest('.chip'); if(!b) return; filter=b.dataset.k||null; document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b)); draw(); };
+
+// order dialog
+$('fKind').innerHTML = Object.entries(KINDS).map(([k,v])=>`<option value="${k}">${v.e} ${v.t}</option>`).join('');
+$('paints').innerHTML = PAINTS.map(p=>`<span style="background:${p}" data-p="${p}"></span>`).join('');
+$('paints').onclick=e=>{ const s=e.target.closest('span'); if(!s) return; paint=s.dataset.p; renderPreview(); };
+function renderPreview(){
+  document.querySelectorAll('#paints span').forEach(s=>s.classList.toggle('on',s.dataset.p===paint));
+  $('preview').style.background=paint; $('preview').style.color=contrast(paint);
+  $('preview').textContent = (KINDS[$('fKind').value].e)+' '+($('fMsg').value || 'Aapka sandesh');
+}
+['fMsg','fKind'].forEach(id=>$(id).addEventListener('input',renderPreview));
+function step(n){ ['st1','st2','st3'].forEach((s,i)=>$(s).classList.toggle('on',i===n-1)); }
+$('buyBtn').onclick=()=>{
+  const n=sel.w*sel.h, amt=n*price().p;
+  order={id:'EENT'+Math.random().toString(36).slice(2,7).toUpperCase(), ...sel, n, amt, no:eentNo(sel.x,sel.y)};
+  $('dMeta').textContent=`Eent No. ${order.no} · ${n} eent · ${inr(amt)}`;
+  step(1); renderPreview(); $('dlg').showModal();
+};
+[['close1'],['close3']].forEach(([id])=>$(id).onclick=()=>$('dlg').close());
+$('back2').onclick=()=>step(1);
+$('toPay').onclick=()=>{
+  if(!$('fName').value.trim()||!$('fCity').value.trim()||!$('fMsg').value.trim()) return alert('Naam, shehar aur sandesh zaroori hai 🙏');
+  const upi=`upi://pay?pa=${encodeURIComponent(CONFIG.upiId)}&pn=${encodeURIComponent(CONFIG.payee)}&am=${order.amt}&cu=INR&tn=${order.id}`;
+  $('dAmt').textContent=order.amt.toLocaleString('en-IN'); $('dId').textContent=order.id; $('upiLink').href=upi;
+  $('qr').innerHTML=''; if(window.QRCode) new QRCode($('qr'),{text:upi,width:170,height:170});
+  step(2);
+};
+$('sendBtn').onclick=()=>{
+  if(!$('fUtr').value.trim()) return alert('UTR number daalo, taaki hum payment check kar sakein 🙏');
+  const o={...order,name:$('fName').value.trim(),city:$('fCity').value.trim(),kind:$('fKind').value,msg:$('fMsg').value.trim(),color:paint,url:$('fUrl').value.trim(),utr:$('fUtr').value.trim()};
+  const text=`🧱 APNI DEEWAR ORDER ${o.id}\nEent No: ${o.no} (x=${o.x}, y=${o.y}, ${o.w}x${o.h})\nRashi: ₹${o.amt}\nUTR: ${o.utr}\nNaam: ${o.name}\nShehar: ${o.city}\nKis liye: ${o.kind}\nSandesh: ${o.msg}\nRang: ${o.color}\nLink: ${o.url||'-'}`;
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`,'_blank');
+  makeCert(o); step(3);
+};
+
+// Deewardar certificate: the flex share
+function makeCert(o){
+  const W=1080,H=1080,k=document.createElement('canvas'); k.width=W; k.height=H; const g=k.getContext('2d');
+  g.fillStyle='#fff3d6'; g.fillRect(0,0,W,H);
+  for(let i=0;i<W;i+=60){ g.fillStyle=['#d9480f','#f59f00','#0b7a4b','#e64980','#1971c2'][i/60%5]; g.fillRect(i,0,60,24); g.fillRect(i,H-24,60,24); }
+  g.strokeStyle='#8a3b12'; g.lineWidth=6; g.strokeRect(50,60,W-100,H-120);
+  g.textAlign='center'; g.fillStyle='#8a3b12';
+  g.font='64px "Yatra One", serif'; g.fillText('DEEWARDAR CERTIFICATE',W/2,170);
+  g.font='36px Mukta, sans-serif'; g.fillStyle='#5a3a24'; g.fillText('Yeh pramanit kiya jaata hai ki',W/2,260);
+  g.font='96px "Yatra One", serif'; g.fillStyle='#d9480f'; g.fillText(o.name,W/2,380,W-160);
+  g.font='40px Mukta, sans-serif'; g.fillStyle='#5a3a24'; g.fillText(`(${o.city}) ab Apni Deewar ke`,W/2,450);
+  g.font='120px "Yatra One", serif'; g.fillStyle='#0b7a4b'; g.fillText(`Eent No. ${o.no}`,W/2,590);
+  g.font='40px Mukta, sans-serif'; g.fillStyle='#5a3a24'; g.fillText('ke kanooni-ish maalik hain. 🧱',W/2,660);
+  g.fillStyle=o.color; g.fillRect(140,710,W-280,110); g.fillStyle=contrast(o.color); g.font='46px "Yatra One", serif'; g.fillText(`${KINDS[o.kind].e} ${o.msg}`,W/2,782,W-320);
+  g.font='italic 38px Mukta, sans-serif'; g.fillStyle='#8a3b12'; g.fillText('"Ghar nahi, toh deewar sahi."',W/2,900);
+  g.font='22px Mukta, sans-serif'; g.fillStyle='#7a5f4c'; g.fillText('Sirf masti ke liye. Asli property nahi, emotional property hai.',W/2,960);
+  // mohar (stamp)
+  g.save(); g.translate(W-165,H-205); g.rotate(-.3); g.strokeStyle='#c92a2acc'; g.lineWidth=6; g.beginPath(); g.arc(0,0,78,0,7); g.stroke();
+  g.fillStyle='#c92a2acc'; g.font='24px "Yatra One", serif'; g.fillText('APNI',0,-8); g.fillText('DEEWAR',0,22); g.restore();
+  const url=k.toDataURL('image/png'); $('cert').src=url; $('certDl').href=url;
+  $('certShare').onclick=async()=>{
+    const text=`Maine property le li! 🏠🧱 Apni Deewar ki Eent No. ${o.no} ab meri hai.\nGhar nahi, toh deewar sahi 😎 Tum bhi Deewardar bano: ${CONFIG.site}`;
+    try{ const f=new File([await (await fetch(url)).blob()],'deewardar.png',{type:'image/png'}); if(navigator.canShare&&navigator.canShare({files:[f]})) return navigator.share({files:[f],text}); }catch(e){}
+    window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+  };
+}
+
+// Lucky eent: free, shareable, and it creates FOMO
+$('luckyBtn').onclick=()=>{
+  const n=$('lName').value.trim(), d=$('lDob').value; if(!n||!d) return alert('Naam aur janamdin dono chahiye 🔮');
+  let h=2166136261; for(const ch of (n.toLowerCase()+d)){ h^=ch.charCodeAt(0); h=Math.imul(h,16777619); }
+  const idx=(h>>>0)%(COLS*ROWS), x=idx%COLS, y=Math.floor(idx/COLS), b=taken.get(x+','+y);
+  const status = b ? `😱 Arre! Yeh eent toh <b>${esc(b.name)} (${esc(b.city)})</b> le gaye. Aas-paas wali lelo, jaldi!` : `✅ Abhi khaali hai! Kismat baar baar nahi bulati.`;
+  $('luckyOut').innerHTML=`<p style="font-size:22px;margin:4px 0"><b>Eent No. ${idx+1}</b></p><p style="margin:0">${status}</p>
+   <div class="tools" style="justify-content:flex-start"><button class="pri" id="grabLucky">Dikhao deewar pe</button>
+   <a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(`Meri lucky eent No. ${idx+1} hai 🔮🧱 ${b?'Kisi ne le li 😭':'Abhi khaali hai!'} Apni lucky eent dekho: ${CONFIG.site}`)}">Doston ko bhejo</a></div>`;
+  $('grabLucky').onclick=()=>{ sel={x,y,w:1,h:1}; updateSel(); draw(); if(zoom===0) $('zoomBtn').click(); $('wrap').scrollTo({left:x*EW*c.clientWidth/2000-100, top:y*EH*c.clientWidth/2000-100, behavior:'smooth'}); };
+};
+
+function stats(){
+  const real=bricks.filter(b=>!b.house), used=bricks.reduce((s,b)=>s+b.w*b.h,0), pr=price();
+  $('sDeewardar').textContent=real.length.toLocaleString('en-IN');
+  $('sLeft').textContent=(COLS*ROWS-used).toLocaleString('en-IN');
+  $('sPrice').textContent=inr(pr.p)+'/eent';
+  $('sNext').textContent = pr.next ? `${pr.left.toLocaleString('en-IN')} eent baad rate ₹${pr.next}` : 'aakhri rate';
+  document.querySelectorAll('.rate').forEach(e=>e.textContent=pr.p);
+  if(real.length) $('feed').innerHTML = real.slice(-8).reverse().map(b=>`<div>${KINDS[b.kind]?.e||'🧱'} <b>"${esc(b.msg)}"</b><br><small>${esc(b.name)}, ${esc(b.city)}</small></div>`).join('');
+  const cities={}; for(const b of real){ const k=b.city.trim().toLowerCase(); cities[k]=(cities[k]||{n:b.city,c:0}); cities[k].c+=b.w*b.h; }
+  const top=Object.values(cities).sort((a,b)=>b.c-a.c).slice(0,7);
+  if(top.length){ const max=top[0].c; $('lb').innerHTML=top.map((t,i)=>`<div style="display:block"><span>${['🥇','🥈','🥉'][i]||'🏅'} ${esc(t.n)}</span> <small style="float:right">${t.c} eent</small><i style="width:${t.c/max*100}%"></i></div>`).join(''); }
+  $('cityShare').onclick=()=>{
+    const lead=top[0]; const text = lead ? `🚨 ${lead.n} wale Apni Deewar pe ${lead.c} eent le ke baithe hain! Hamare shehar ki izzat ka sawaal hai 😤🧱 ${CONFIG.site}` : `Apni Deewar pe abhi koi shehar number 1 nahi. Chalo apna shehar pehla banaate hain! 🧱 ${CONFIG.site}`;
+    window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+  };
+}
+
+fetch('deewar.json').then(r=>r.json()).then(d=>{
+  bricks=d.bricks||[];
+  for(const b of bricks) for(let x=b.x;x<b.x+b.w;x++) for(let y=b.y;y<b.y+b.h;y++) taken.set(x+','+y,b);
+  stats(); draw();
+}).catch(()=>{ stats(); draw(); });
+document.fonts && document.fonts.ready.then(draw);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+draw();
+</script>
+</body>
+</html>

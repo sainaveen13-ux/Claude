@@ -1,0 +1,8 @@
+{
+  "bricks": [
+    { "x": 0,  "y": 0,  "w": 6,  "h": 4, "house": true, "color": "#f59f00", "msg": "🍋🌶️", "story": "Buri nazar wale, tera munh kaala 🍋🌶️ (Deewar ki suraksha ka intezaam ho gaya hai)" },
+    { "x": 38, "y": 46, "w": 24, "h": 5, "house": true, "color": "#212529", "msg": "YAHAN THOOKNA MANA HAI", "story": "Har Indian deewar pe yeh likha hona compulsory hai. Kanoon hai. Shayad." },
+    { "x": 80, "y": 94, "w": 20, "h": 6, "house": true, "color": "#e64980", "msg": "HORN OK PLEASE", "story": "Truck waale bhaiya ka aashirwad 🚚" },
+    { "x": 0,  "y": 95, "w": 16, "h": 5, "house": true, "color": "#0b7a4b", "msg": "▶ Rupaya Files", "story": "Is deewar ka poora safar Rupaya Files YouTube channel pe dekho 📺" }
+  ]
+}
