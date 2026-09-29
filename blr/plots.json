@@ -1,6 +1,14 @@
 {
   "plots": [
-    { "house": true, "cells": [[141,108],[141,109],[141,110],[142,108],[142,109],[142,110]], "name": "Ten Rupee Estates", "cat": "traffic", "color": "#1b1b1f", "msg": "SITE OFFICE. Open 24x7 because we're stuck in traffic." },
-    { "house": true, "cells": [[133,145],[133,146],[134,145],[134,146]], "name": "Ten Rupee Estates", "cat": "roads", "color": "#0c8599", "msg": "Lake-view sample plot. Foam is complimentary." }
+    { "house": true, "at": [12.9177, 77.6233], "w": 3, "h": 2, "name": "Ten Rupee Estates", "cat": "traffic", "color": "#0d1b2a", "msg": "SITE OFFICE. Open 24x7 because we're stuck in traffic." },
+    { "house": true, "at": [12.9362, 77.6620], "w": 2, "h": 2, "name": "Ten Rupee Estates", "cat": "roads", "color": "#0c8599", "msg": "Lake-view plot. Foam is complimentary." },
+
+    { "sample": true, "at": [12.9352, 77.6245], "w": 2, "h": 1, "name": "Tired Techie", "cat": "deposit", "color": "#e8590c", "msg": "Paid 10 months deposit. Got 0 months of peace." },
+    { "sample": true, "at": [12.9116, 77.6474], "w": 2, "h": 2, "name": "Founder (pre-revenue)", "cat": "broker", "color": "#9c36b5", "msg": "Broker charged one month's rent to open a door." },
+    { "sample": true, "at": [12.9784, 77.6408], "w": 3, "h": 1, "name": "Non-veg Nikhil", "cat": "landlord", "color": "#5c3d2e", "msg": "No non-veg, no guests, no pets, no happiness." },
+    { "sample": true, "at": [12.9304, 77.6784], "w": 1, "h": 2, "name": "Society WhatsApp Admin", "cat": "water", "color": "#1c7ed6", "msg": "Our water tanker has better attendance than me." },
+    { "sample": true, "at": [12.9698, 77.7500], "w": 2, "h": 1, "name": "ORR Survivor", "cat": "traffic", "color": "#1971c2", "msg": "Office is 9 km away. Commute is 90 minutes." },
+    { "sample": true, "at": [12.9591, 77.6974], "w": 2, "h": 2, "name": "Appraisal Pending", "cat": "rent", "color": "#e03131", "msg": "Rent went up 15%. My salary went up 'next cycle'." },
+    { "sample": true, "at": [12.9166, 77.6101], "w": 1, "h": 1, "name": "Bachelor, 27", "cat": "landlord", "color": "#5c3d2e", "msg": "Bachelors not allowed. Neither is hope." }
   ]
 }

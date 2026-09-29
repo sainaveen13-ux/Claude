@@ -1,0 +1,661 @@
+<title>Ten Rupee Estates</title>
+<meta name="description" content="Can't afford a house in Bengaluru? Own a plot for ₹10. No broker. No 10-month deposit. No landlord. Write your frustration on your land for the whole city to read.">
+<meta property="og:title" content="Finally, land in Bengaluru I can afford. ₹10.">
+<meta property="og:description" content="Plots in all 243 BBMP wards. ₹10 a cell. No broker, no deposit, no landlord. Your land, your rant.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a luxury developer's launch microsite, sabotaged by honesty. Offer bar, then pitch, then the city map as the centrepiece, then proof and fine print. */
+:root{
+  --bg:#f2f4f8; --surface:#ffffff; --fg:#0d1b2a; --mut:#5a6577; --line:#dde2ea;
+  --gold:#b8862b; --gold-soft:#f3e6c8; --alert:#e5383b; --ok:#2b8a3e; --wa:#25d366;
+  --map-bg:#e6ebf2; --ward:#ffffff; --ward-alt:#f4f6fa; --ward-line:#c3ccd9; --grid:rgba(13,27,42,.14); --label:#0d1b2a; --halo:rgba(255,255,255,.9);
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif; --f-body:"Manrope",system-ui,-apple-system,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#08121e; --surface:#0f1d2e; --fg:#eef2f7; --mut:#93a1b5; --line:#1f3048;
+  --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#e8eef6; --halo:rgba(8,18,30,.85); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08121e; --surface:#0f1d2e; --fg:#eef2f7; --mut:#93a1b5; --line:#1f3048;
+  --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#e8eef6; --halo:rgba(8,18,30,.85); color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body)}
+a{color:var(--gold)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px}
+
+/* offer bar */
+.offer{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--alert);color:#fff;font-weight:700;font-size:13px;letter-spacing:.02em}
+.offer .wrap{display:flex;gap:6px 14px;align-items:center;justify-content:center;flex-wrap:wrap;padding-block:7px;text-align:center}
+.offer b{font-family:var(--f-mono);font-variant-numeric:tabular-nums;background:#0003;padding:1px 7px;border-radius:5px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:end;padding-block:36px 18px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5.6vw,66px);line-height:.98;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 .price{color:var(--gold);white-space:nowrap}
+.lede{font-size:clamp(17px,2vw,20px);color:var(--mut);max-width:34ch;margin:16px 0 20px}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:12px 18px;font-weight:800;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;text-decoration:none;font-size:15px;transition:transform .12s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#0d1b2a}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:#05361b}
+.btn.ghost{background:transparent}
+.btn.sm{padding:8px 12px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.stickers{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.sticker{font-family:var(--f-mono);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;border:1.5px dashed var(--fg);padding:6px 10px;border-radius:6px;background:var(--surface)}
+.sticker s{color:var(--alert);text-decoration-thickness:2px}
+.sticker:nth-child(odd){transform:rotate(-2deg)}.sticker:nth-child(even){transform:rotate(1.5deg)}
+
+/* ticker */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-block:1.5px solid var(--fg);margin-block:8px 22px}
+.stats div{padding:12px 14px;min-width:0}
+.stats div+div{border-left:1px solid var(--line)}
+.stats b{display:block;font-family:var(--f-display);font-size:clamp(18px,2.4vw,26px);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats small{color:var(--mut);font-size:13px}
+
+/* map */
+.mapbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.mapbar input{flex:1 1 220px;min-width:0;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:10px}
+.chip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-weight:700;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.map{position:relative;height:min(74vh,760px);min-height:440px;border-radius:18px;overflow:hidden;border:1.5px solid var(--line);background:var(--map-bg)}
+.map canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.map canvas.drag{cursor:grabbing}
+.zoom{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.zoom button{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);font-size:20px;font-weight:800;cursor:pointer}
+.hint{position:absolute;left:12px;top:12px;z-index:3;background:var(--fg);color:var(--bg);font-size:13px;font-weight:700;padding:6px 11px;border-radius:99px;max-width:calc(100% - 80px)}
+.tip{position:absolute;z-index:4;pointer-events:none;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;max-width:260px;box-shadow:0 6px 24px #0003}
+.tip b{display:block}
+.cart{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--fg);border-radius:16px;padding:8px 8px 8px 16px;box-shadow:0 12px 40px #0004;width:max-content;max-width:calc(100% - 24px)}
+.cart span{font-weight:700;font-size:14px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart span em{font-style:normal;font-family:var(--f-mono);color:var(--gold)}
+.credit{position:absolute;right:10px;bottom:6px;font-size:11px;color:var(--mut);z-index:2}
+
+/* sections */
+section{padding-block:26px}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(22px,3vw,32px);letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.panel{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+.panel h3{font-family:var(--f-display);font-weight:700;font-size:18px;margin:0 0 4px}
+.panel p.s{color:var(--mut);margin:0 0 12px;font-size:14px}
+.feed{display:grid;gap:10px}
+.rant{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding:10px 0;border-top:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;width:100%;color:inherit}
+.rant .e{font-size:20px;grid-row:span 2}
+.rant q{font-weight:700;quotes:"“" "”"}
+.rant small{color:var(--mut)}
+.tag{font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.08em;background:var(--gold-soft);color:var(--gold);padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:1px}
+.lb{display:grid;gap:10px}
+.lb div{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-weight:700}
+.lb small{color:var(--mut);font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.lb i{grid-column:1/-1;height:6px;border-radius:9px;background:var(--gold)}
+label{display:block;font-size:13px;font-weight:700;color:var(--mut);margin:12px 0 4px}
+.field{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg)}
+.big{font-family:var(--f-display);font-size:clamp(28px,4vw,40px);font-variant-numeric:tabular-nums;margin:14px 0 2px;color:var(--gold)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{border-top:3px solid var(--fg);padding-top:12px;min-width:0}
+.steps li::before{counter-increment:s;content:"Step " counter(s);display:block;font-family:var(--f-mono);font-size:12px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+.faq details{border-top:1px solid var(--line);padding:12px 0}
+.faq summary{font-weight:800;cursor:pointer}
+.faq p{margin:8px 0 0;color:var(--mut)}
+footer{border-top:1.5px solid var(--fg);margin-top:20px;padding-block:22px 40px;color:var(--mut);font-size:13px}
+
+/* dialogs */
+dialog{border:1.5px solid var(--fg);border-radius:20px;background:var(--surface);color:var(--fg);padding:22px;width:min(460px,calc(100% - 24px));max-height:calc(100% - 24px)}
+dialog::backdrop{background:rgba(5,12,20,.72);backdrop-filter:blur(3px)}
+dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
+.meta{font-family:var(--f-mono);font-size:13px;color:var(--mut);margin:6px 0 0}
+.paints{display:flex;gap:8px;flex-wrap:wrap}
+.paints button{width:32px;height:32px;border-radius:8px;border:3px solid transparent;cursor:pointer}
+.paints button[aria-pressed="true"]{border-color:var(--fg)}
+.preview{margin-top:12px;border-radius:10px;padding:12px;font-weight:800;color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.qr{background:#fff;padding:10px;border-radius:12px;width:max-content;margin:12px auto 8px}
+.upi{display:flex;gap:8px;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:14px}
+.err{color:var(--alert);font-weight:700;font-size:14px;margin:8px 0 0;min-height:1.2em}
+#letterImg{width:100%;border-radius:12px;margin-top:12px;border:1px solid var(--line)}
+.step{display:none}.step.on{display:block}
+.story{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;width:min(460px,calc(100% - 32px));background:var(--surface);border:1.5px solid var(--fg);border-radius:18px;padding:16px 18px;box-shadow:0 16px 50px #0006}
+.story .x{position:absolute;right:8px;top:6px;border:0;background:none;font-size:22px;cursor:pointer;color:var(--mut)}
+.story q{display:block;font-family:var(--f-display);font-weight:700;font-size:19px;line-height:1.25;margin:6px 28px 8px 0;quotes:"“" "”"}
+.story small{color:var(--mut)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;align-items:start;padding-block:24px 10px}
+  .stickers{justify-content:flex-start}
+  .cols{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stats div:nth-child(3){border-left:0}
+  .stats div:nth-child(n+3){border-top:1px solid var(--line)}
+  .faq{grid-template-columns:1fr}
+  .map{height:66vh;min-height:380px}
+  #pAfter{display:none}
+  .offer .wrap{font-size:12px;padding-block:6px}
+  .cart{padding-left:12px;gap:6px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="offer" role="status"><div class="wrap">
+  <span>🪔 NAVRATRI PRE-LAUNCH OFFER · ₹<span id="pNow">10</span>/cell</span>
+  <span>Ends at Ghatasthapana in <b id="countdown">--</b></span>
+  <span id="pAfter">Then ₹15/cell. Like every builder, we will raise prices.</span>
+</div></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Ten Rupee Estates · Bengaluru · All 243 BBMP wards</p>
+      <h1>Can't afford a house in Bengaluru? Own land for <span class="price">₹10.</span></h1>
+      <p class="lede">Pick a cell anywhere inside city limits and it's yours. Write your frustration on it so the whole city can read it.</p>
+      <div class="cta"><a class="btn gold" href="#map">Pick my plot →</a><a class="btn ghost" href="#rent">Check my rent pain</a></div>
+    </div>
+    <div class="stickers" aria-label="What you don't pay">
+      <span class="sticker"><s>Broker</s> ₹0</span>
+      <span class="sticker"><s>10-month deposit</s> ₹0</span>
+      <span class="sticker"><s>Landlord</s> You</span>
+      <span class="sticker"><s>"Veg only"</s> Eat anything</span>
+      <span class="sticker"><s>"Family only"</s> Bachelors welcome</span>
+      <span class="sticker">Possession: immediate</span>
+    </div>
+  </header>
+
+  <div class="stats" aria-live="polite">
+    <div><b id="sOwners">0</b><small>landowners</small></div>
+    <div><b id="sCells">0</b><small>cells sold</small></div>
+    <div><b id="sLeft">26,258</b><small>cells left in the city</small></div>
+    <div><b id="sTop">Nobody yet</b><small>most frustrated area</small></div>
+  </div>
+
+  <section id="map" style="padding-top:0">
+    <div class="mapbar">
+      <input id="search" class="field" list="places" placeholder="Jump to your area: Koramangala, HSR, Whitefield…" autocomplete="off">
+      <datalist id="places"></datalist>
+      <button class="btn sm" id="randBtn">🎲 Random rant</button>
+    </div>
+    <div class="chips" id="chips" role="toolbar" aria-label="Filter rants by frustration"></div>
+    <div class="map" id="mapBox">
+      <canvas id="cv" aria-label="Map of Bengaluru divided into ₹10 plots"></canvas>
+      <div class="hint" id="hint">Drag to move · Pinch or scroll to zoom · Tap to pick cells</div>
+      <div class="zoom"><button id="zIn" aria-label="Zoom in">+</button><button id="zOut" aria-label="Zoom out">−</button><button id="zFit" aria-label="Show whole city">⤢</button></div>
+      <div class="tip" id="tip" hidden></div>
+      <div class="cart" id="cart" hidden><span id="cartTxt"></span><button class="btn sm ghost" id="clearBtn">Clear</button><button class="btn sm gold" id="buyBtn">Buy plot</button></div>
+      <div class="credit">Ward boundaries: BBMP via DataMeet (CC BY 4.0)</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="cols">
+      <div class="panel" id="rent">
+        <h3>Rent reality check</h3>
+        <p class="s">Enter what Bengaluru charges you. We'll convert it into land.</p>
+        <label for="rRent">Monthly rent (₹)</label><input class="field" id="rRent" type="number" inputmode="numeric" value="35000">
+        <label for="rDep">Deposit (months of rent)</label><input class="field" id="rDep" type="number" inputmode="numeric" value="10">
+        <div id="rOut"></div>
+        <div class="row"><a class="btn wa sm" id="rShare" target="_blank" rel="noopener">Share on WhatsApp</a><button class="btn sm" id="rCopy">Copy</button></div>
+      </div>
+      <div class="panel">
+        <h3>Fresh rants</h3>
+        <p class="s" id="feedNote">Straight from the landowners.</p>
+        <div class="feed" id="feed"></div>
+      </div>
+      <div class="panel">
+        <h3>Most frustrated areas</h3>
+        <p class="s" id="lbNote">Cells sold per area. Rivalry encouraged.</p>
+        <div class="lb" id="lb"></div>
+        <div class="row"><a class="btn wa sm" id="lbShare" target="_blank" rel="noopener">Challenge your area</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to become a Bengaluru landowner</h2>
+    <ol class="steps">
+      <li><b>Pick your cells.</b> Zoom into any ward and tap. Each cell is about 165 m across and costs ₹<span class="pr">10</span>.</li>
+      <li><b>Write your rant.</b> Choose a frustration and add up to 60 characters for the city to read.</li>
+      <li><b>Pay by UPI.</b> No stamp duty, no khata charges, no "processing fee".</li>
+      <li><b>Get your allotment letter.</b> Your plot goes live on the map within 24 hours.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>Is this BDA approved?</summary><p>No. It is approved by everyone who has ever paid a 10-month deposit.</p></details>
+      <details><summary>When do I get possession?</summary><p>Immediately. Unlike that pre-launch flat you booked in 2019.</p></details>
+      <details><summary>Is it near the metro?</summary><p>Every plot is near an upcoming metro. We just don't say which decade.</p></details>
+      <details><summary>Can I build a house on it?</summary><p>You can build a rant on it. That is more than your current rent allows.</p></details>
+      <details><summary>Is this real land?</summary><p>No. Ten Rupee Estates is satire. Your plot is a spot on a map and a line of text. The frustration is real.</p></details>
+      <details><summary>What can't I write?</summary><p>Politics, hate against any community, abuse, real names of people or landlords, phone numbers, betting or adult content. We refund anything we reject.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    Ten Rupee Estates is a satire project by <a href="https://www.youtube.com/@RupayaFiles" target="_blank" rel="noopener">Rupaya Files</a>. Plots are cells on a map, not real property, and no approval, title or ownership is offered or implied. Ward boundaries © BBMP, published by DataMeet under CC BY 4.0. Landmark positions are approximate.
+  </footer>
+</div>
+
+<div class="story" id="story" hidden><button class="x" id="storyX" aria-label="Close">×</button><div id="storyBody"></div></div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="step on" id="st1">
+    <h3 id="dlgTitle">Register your plot</h3>
+    <p class="meta" id="dMeta"></p>
+    <label for="fName">Your name or alias</label><input class="field" id="fName" maxlength="24" placeholder="Tired Techie">
+    <label for="fCat">What's your frustration?</label><select class="field" id="fCat"></select>
+    <label for="fMsg">Your rant (max 60 characters)</label><input class="field" id="fMsg" maxlength="60" placeholder="Paid 10 months deposit. Got 0 months of peace.">
+    <label>Plot colour</label><div class="paints" id="paints"></div>
+    <div class="preview" id="preview">Your rant appears here</div>
+    <label for="fUrl">Link (optional: Instagram, X or LinkedIn)</label><input class="field" id="fUrl" placeholder="https://">
+    <p class="err" id="err1"></p>
+    <div class="row"><button class="btn gold" id="toPay">Continue to payment</button><button class="btn ghost" id="close1">Cancel</button></div>
+  </div>
+  <div class="step" id="st2">
+    <h3>Pay the registration</h3>
+    <p class="meta" id="payMeta"></p>
+    <div class="qr" id="qr"></div>
+    <div class="upi"><span id="upiTxt"></span><button class="btn sm" id="upiCopy">Copy UPI ID</button></div>
+    <div class="row" style="justify-content:center"><a class="btn gold sm" id="upiLink" href="#">Open UPI app</a></div>
+    <label for="fUtr">UPI transaction ID (UTR)</label><input class="field" id="fUtr" inputmode="numeric" maxlength="22" placeholder="12-digit UTR from your UPI app">
+    <p class="err" id="err2"></p>
+    <div class="row"><a class="btn wa" id="sendBtn" target="_blank" rel="noopener" href="#">Send order on WhatsApp</a><button class="btn ghost" id="back2">Back</button></div>
+  </div>
+  <div class="step" id="st3">
+    <h3>Congratulations, landowner</h3>
+    <p style="margin:6px 0 0">Your order is in. Your plot goes live within 24 hours. Here is your allotment letter. Long-press or right-click it to save.</p>
+    <img id="letterImg" alt="Your Ten Rupee Estates allotment letter">
+    <div class="row"><a class="btn gold sm" id="letterDl" download="ten-rupee-estates-allotment.png">Download</a><a class="btn wa sm" id="letterShare" target="_blank" rel="noopener">Share on WhatsApp</a><button class="btn ghost sm" id="close3">Done</button></div>
+  </div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>/*GEO*/</script>
+<script>/*PLOTS*/</script>
+<script>
+// ================= CONFIG: fill in before launch =================
+const CONFIG = {
+  upiId:    "yourname@upi",                 // your UPI ID
+  payee:    "Ten Rupee Estates",
+  whatsapp: "919999999999",                 // order inbox, country code first, no +
+  offerEnds: "2026-10-11T06:00:00+05:30",   // Navratri Ghatasthapana
+  priceOffer: 10, priceAfter: 15,           // ₹ per cell before and after the offer
+  maxCells: 200,
+  site: location.href.split("#")[0]         // replace with your public link (for example your GitHub Pages URL) before launch
+};
+// ==================================================================
+
+const $ = id => document.getElementById(id);
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const num = n => Math.round(n).toLocaleString("en-IN");
+const esc = s => String(s ?? "").replace(/[<>&"]/g, m => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[m]));
+const price = () => Date.now() < Date.parse(CONFIG.offerEnds) ? CONFIG.priceOffer : CONFIG.priceAfter;
+const waLink = (text, to = "") => `https://wa.me/${to}?text=${encodeURIComponent(text)}`;
+
+// ---------- geography ----------
+const KX = Math.cos(12.97 * Math.PI / 180) * 111.32, KY = 110.57;   // km per degree
+const G = GEO, CW = G.d * KX, CH = G.d * KY;                           // cell size in km
+const toXY = (lat, lng) => [(lng - G.lng0) * KX, (G.lat0 - lat) * KY];
+const cellWard = Uint8Array.from(atob(G.cells), c => c.charCodeAt(0));
+const wardOf = (r, c) => (r < 0 || c < 0 || r >= G.rows || c >= G.cols) ? -1 : cellWard[r * G.cols + c] - 1;
+const WARDS = G.wards.map(([name, no, rings]) => {
+  const path = new Path2D(); let sx = 0, sy = 0, n = 0;
+  for (const flat of rings) {
+    let x = 0, y = 0;
+    for (let i = 0; i < flat.length; i += 2) {
+      x += flat[i]; y += flat[i + 1];
+      const [px, py] = toXY(y / G.q, x / G.q);
+      i ? path.lineTo(px, py) : path.moveTo(px, py);
+      sx += px; sy += py; n++;
+    }
+    path.closePath();
+  }
+  return { name, no, path, cx: sx / n, cy: sy / n };
+});
+const CITY = new Path2D(); WARDS.forEach(w => CITY.addPath(w.path));
+
+// Well-known neighbourhood names people actually use, with a roast each. Positions are approximate centres.
+const AREAS = [
+  ["Koramangala",12.9352,77.6245,"Startup capital. Your plot is pre-revenue."],
+  ["Indiranagar",12.9784,77.6408,"100 Feet Road. 0 feet of parking."],
+  ["HSR Layout",12.9116,77.6474,"Every second resident is a founder."],
+  ["BTM Layout",12.9166,77.6101,"Bachelor capital. Landlords still say 'family only'."],
+  ["Silk Board",12.9177,77.6233,"Comes with a lifetime view of the same traffic jam."],
+  ["Bellandur",12.9304,77.6784,"Lake view. The lake may occasionally catch fire."],
+  ["Marathahalli",12.9591,77.6974,"The bridge is always being fixed."],
+  ["Whitefield",12.9698,77.7500,"The metro finally reached. Your salary didn't."],
+  ["Mahadevapura",12.9916,77.7010,"Flooded in 2022. Rent went up anyway."],
+  ["KR Puram",13.0070,77.6950,"Hanging bridge, hanging hopes."],
+  ["Hoodi",12.9923,77.7160,"Where cab drivers cancel your ride."],
+  ["Bommanahalli",12.9020,77.6230,"Close to Silk Board. Emotionally, too close."],
+  ["JP Nagar",12.9063,77.5857,"Phases 1 to 9. Rent only has one phase: up."],
+  ["Jayanagar",12.9250,77.5938,"Old Bangalore charm. New Bangalore rent."],
+  ["Basavanagudi",12.9422,77.5738,"Aunties here will judge your plot too."],
+  ["Banashankari",12.9255,77.5468,"One available flat. Already taken."],
+  ["MG Road",12.9756,77.6050,"Prime central land. Finally within your budget."],
+  ["Ulsoor",12.9817,77.6286,"Lake-facing, landlord-free."],
+  ["Domlur",12.9610,77.6387,"The flyover took your peace. Get it back for ₹10."],
+  ["Frazer Town",12.9982,77.6146,"Come for the biryani, stay for the plot."],
+  ["Malleshwaram",13.0031,77.5643,"Filter coffee included. Deposit not required."],
+  ["Rajajinagar",12.9910,77.5525,"Wide roads, narrow budgets."],
+  ["Majestic",12.9767,77.5713,"Every bus comes here. None leave on time."],
+  ["Vijayanagar",12.9719,77.5352,"Metro-connected, landlord-disconnected."],
+  ["Yeshwanthpur",13.0280,77.5409,"Railway junction. Your life is also at a junction."],
+  ["Peenya",13.0285,77.5197,"Asia's biggest industrial area. Smallest flats."],
+  ["Hebbal",13.0358,77.5970,"The flyover of dreams, and of queues."],
+  ["Hennur",13.0400,77.6420,"Up and coming since forever."],
+  ["Banaswadi",13.0104,77.6480,"Cheaper than Indiranagar. Emotionally the same."],
+  ["RT Nagar",13.0212,77.5946,"Quiet streets, loud rent."],
+  ["Yelahanka",13.1005,77.5963,"Near the airport. Far from everything else."],
+  ["Kengeri",12.9081,77.4851,"The metro's last stop. So is your patience."],
+  ["Nagarbhavi",12.9600,77.5100,"Office is 28 km away. You live here anyway."],
+  ["Electronic City",12.8452,77.6602,"Two-hour commute included free."],
+  ["Hulimavu",12.8780,77.6000,"Bannerghatta Road traffic moves slower than the zoo animals."],
+  ["Kammanahalli",13.0150,77.6380,"Great food. Greater deposit."],
+  ["Thanisandra",13.0600,77.6320,"New apartments. Old excuses for delay."],
+  ["Varthur",12.9400,77.7470,"Lake froth, Wi-Fi drops, rent rises."]
+].map(([name, lat, lng, quip]) => { const [x, y] = toXY(lat, lng); return { name, lat, lng, quip, x, y }; });
+
+const LANDMARKS = [
+  ["🌳 Cubbon Park",12.9763,77.5929],["🌳 Lalbagh",12.9507,77.5848],["💧 Bellandur Lake",12.9360,77.6620],
+  ["💧 Ulsoor Lake",12.9830,77.6200],["💧 Hebbal Lake",13.0450,77.5890],["💧 Varthur Lake",12.9450,77.7400],
+  ["💧 Sankey Tank",13.0090,77.5740],["🚦 Silk Board",12.9177,77.6233],["🚌 Majestic",12.9767,77.5713],
+  ["🏏 Chinnaswamy",12.9788,77.5996],["🏛️ Vidhana Soudha",12.9796,77.5906]
+].map(([t, lat, lng]) => { const [x, y] = toXY(lat, lng); return { t, x, y }; });
+
+// Each cell gets the neighbourhood name people use (within 2.2 km), else its official ward name.
+const LOC = new Int16Array(G.rows * G.cols).fill(-1000);
+const areaCells = new Map();
+for (let r = 0; r < G.rows; r++) for (let c = 0; c < G.cols; c++) {
+  const w = wardOf(r, c); if (w < 0) continue;
+  const x = (c + .5) * CW, y = (r + .5) * CH; let best = -1, bd = 2.2;
+  for (let i = 0; i < AREAS.length; i++) { const d = Math.hypot(AREAS[i].x - x, AREAS[i].y - y); if (d < bd) { bd = d; best = i; } }
+  const v = best >= 0 ? best : -(w + 1); LOC[r * G.cols + c] = v;
+  const nm = best >= 0 ? AREAS[best].name : WARDS[w].name; areaCells.set(nm, (areaCells.get(nm) || 0) + 1);
+}
+const TOTAL = [...areaCells.values()].reduce((a, b) => a + b, 0);
+const placeOf = (r, c) => { const v = LOC[r * G.cols + c]; return v >= 0 ? AREAS[v].name : v > -1000 ? WARDS[-v - 1].name : null; };
+const quipOf = (r, c) => { const v = LOC[r * G.cols + c]; return v >= 0 ? AREAS[v].quip : "Official BBMP ward. Unofficially, nobody can afford it either."; };
+const plotId = (r, c) => { const w = wardOf(r, c); return `W${String(WARDS[w]?.no ?? 0).padStart(3, "0")}-${String(r * G.cols + c).padStart(5, "0")}`; };
+const cellAt = (x, y) => ({ r: Math.floor(y / CH), c: Math.floor(x / CW) });
+
+// ---------- plots ----------
+const CATS = {
+  rent:{e:"🏠",t:"Rent",c:"#e03131"}, deposit:{e:"💸",t:"Deposit",c:"#e8590c"}, broker:{e:"🤝",t:"Broker",c:"#9c36b5"},
+  landlord:{e:"🧓",t:"Landlord",c:"#5c3d2e"}, traffic:{e:"🚗",t:"Traffic",c:"#1971c2"}, water:{e:"🚰",t:"Water tanker",c:"#0c8599"},
+  roads:{e:"🕳️",t:"Potholes & floods",c:"#495057"}, dream:{e:"✨",t:"Dream home someday",c:"#2b8a3e"}
+};
+const PAINTS = ["#e03131","#e8590c","#f59f00","#2b8a3e","#0c8599","#1971c2","#9c36b5","#0d1b2a"];
+let plots = [], owned = new Map(), cart = new Map(), filter = null;
+
+function loadPlots(list) {
+  plots = []; owned.clear();
+  for (const p0 of list) {
+    const p = { ...p0 };
+    if (p.at) { const [x, y] = toXY(p.at[0], p.at[1]), o = cellAt(x, y); p.cells = []; for (let i = 0; i < (p.h || 1); i++) for (let j = 0; j < (p.w || 1); j++) p.cells.push([o.r + i, o.c + j]); }
+    p.cells = (p.cells || []).filter(([r, c]) => wardOf(r, c) >= 0 && !owned.has(r * 1000 + c));
+    if (!p.cells.length) continue;
+    p.place = placeOf(p.cells[0][0], p.cells[0][1]);
+    plots.push(p); for (const [r, c] of p.cells) owned.set(r * 1000 + c, p);
+  }
+  refreshStats(); draw();
+}
+
+// ---------- map rendering ----------
+const cv = $("cv"), ctx = cv.getContext("2d"), box = $("mapBox");
+let view = { s: 1, tx: 0, ty: 0 }, W = 0, H = 0, dpr = 1, raf = 0;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let COL = {};
+function readColors() { for (const k of ["map-bg","ward","ward-alt","ward-line","grid","label","halo","gold","alert","fg"]) COL[k] = css("--" + k); }
+function fit() { const bw = G.cols * CW, bh = G.rows * CH, s = Math.min(W / bw, H / bh) * 1.02; view = { s, tx: (W - bw * s) / 2, ty: (H - bh * s) / 2 }; }
+function resize() { const r = box.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; if (!view.init) { fit(); view.init = 1; } draw(); }
+const minS = () => Math.min(W / (G.cols * CW), H / (G.rows * CH)) * .9, maxS = 480;
+function zoomAt(f, px, py) { const s = Math.max(minS(), Math.min(maxS, view.s * f)); f = s / view.s; view.tx = px - (px - view.tx) * f; view.ty = py - (py - view.ty) * f; view.s = s; draw(); }
+function flyTo(x, y, s) { view.s = Math.max(minS(), Math.min(maxS, s)); view.tx = W / 2 - x * view.s; view.ty = H / 2 - y * view.s; view.init = 1; draw(); }
+const scr = (x, y) => [x * view.s + view.tx, y * view.s + view.ty];
+const world = (px, py) => [(px - view.tx) / view.s, (py - view.ty) / view.s];
+function draw() { if (!raf) raf = requestAnimationFrame(render); }
+
+function render() {
+  raf = 0; const { s, tx, ty } = view;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = COL["map-bg"]; ctx.fillRect(0, 0, W, H);
+  ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * tx, dpr * ty);
+  WARDS.forEach((w, i) => { ctx.fillStyle = i % 2 ? COL["ward-alt"] : COL.ward; ctx.fill(w.path); });
+  ctx.lineWidth = 1 / s; ctx.strokeStyle = COL["ward-line"]; WARDS.forEach(w => ctx.stroke(w.path));
+  ctx.lineWidth = 2.2 / s; ctx.strokeStyle = COL.fg; ctx.globalAlpha = .55; ctx.stroke(CITY); ctx.globalAlpha = 1;
+  const [x0, y0] = world(0, 0), [x1, y1] = world(W, H);
+  const r0 = Math.max(0, Math.floor(y0 / CH)), r1 = Math.min(G.rows - 1, Math.floor(y1 / CH)), c0 = Math.max(0, Math.floor(x0 / CW)), c1 = Math.min(G.cols - 1, Math.floor(x1 / CW));
+  const cellPx = CW * s;
+  if (cellPx >= 9) {
+    ctx.strokeStyle = COL.grid; ctx.lineWidth = 1 / s; ctx.beginPath();
+    for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) if (wardOf(r, c) >= 0) ctx.rect(c * CW, r * CH, CW, CH);
+    ctx.stroke();
+  }
+  const pad = Math.max(0, (2.5 / s - CW) / 2);   // keep tiny plots visible when zoomed out
+  for (const p of plots) {
+    ctx.globalAlpha = filter && p.cat !== filter ? .12 : 1;
+    ctx.fillStyle = p.color || CATS[p.cat]?.c || COL.alert;
+    for (const [r, c] of p.cells) ctx.fillRect(c * CW - pad, r * CH - pad, CW + pad * 2, CH + pad * 2);
+  }
+  ctx.globalAlpha = 1;
+  if (cart.size) { ctx.fillStyle = COL.gold; ctx.globalAlpha = .85; for (const [, v] of cart) ctx.fillRect(v.c * CW, v.r * CH, CW, CH); ctx.globalAlpha = 1; ctx.strokeStyle = COL.fg; ctx.lineWidth = 2 / s; for (const [, v] of cart) ctx.strokeRect(v.c * CW, v.r * CH, CW, CH); }
+  if (hoverCell && wardOf(hoverCell.r, hoverCell.c) >= 0 && cellPx >= 9) { ctx.strokeStyle = COL.gold; ctx.lineWidth = 2.5 / s; ctx.strokeRect(hoverCell.c * CW, hoverCell.r * CH, CW, CH); }
+
+  // labels in screen space
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  const boxes = [];
+  const label = (t, x, y, font, color, force) => {
+    const [px, py] = scr(x, y); if (px < -80 || py < -20 || px > W + 80 || py > H + 20) return;
+    ctx.font = font; const w = ctx.measureText(t).width + 8, b = [px - w / 2, py - 9, w, 18];
+    if (!force && boxes.some(o => b[0] < o[0] + o[2] && b[0] + b[2] > o[0] && b[1] < o[1] + o[3] && b[1] + b[3] > o[1])) return;
+    boxes.push(b); ctx.lineWidth = 3.5; ctx.strokeStyle = COL.halo; ctx.strokeText(t, px, py); ctx.fillStyle = color; ctx.fillText(t, px, py);
+  };
+  if (s > 4) LANDMARKS.forEach(l => label(l.t, l.x, l.y, "600 12px Manrope,sans-serif", COL.label));
+  AREAS.forEach(a => { if (placeOf(Math.floor(a.y / CH), Math.floor(a.x / CW))) label(a.name.toUpperCase(), a.x, a.y, `800 ${s > 30 ? 13 : 11}px Manrope,sans-serif`, COL.label); });
+  if (s > 22) WARDS.forEach(w => label(w.name, w.cx, w.cy, "500 11px Manrope,sans-serif", COL.label));
+  if (cellPx >= 26) {
+    ctx.textAlign = "left"; ctx.font = "700 12px Manrope,sans-serif";
+    for (const p of plots) { if (filter && p.cat !== filter) continue; const [r, c] = p.cells[0], [px, py] = scr(c * CW, r * CH); if (px > W || py > H || px < -300 || py < -40) continue;
+      const t = `${CATS[p.cat]?.e || ""} ${p.msg}`; ctx.lineWidth = 3.5; ctx.strokeStyle = "#000b"; ctx.strokeText(t, px + 4, py + cellPx / 2); ctx.fillStyle = "#fff"; ctx.fillText(t, px + 4, py + cellPx / 2); }
+  }
+  $("hint").textContent = cellPx < 9 ? "Zoom in to see the ₹" + price() + " cells · tap an area to zoom" : cart.size ? "Tap more cells to grow your plot" : "Tap empty cells to build your plot · tap coloured plots to read them";
+}
+
+// ---------- interaction ----------
+const ptrs = new Map(); let moved = false, start = null, pinch = null, hoverCell = null;
+cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.offsetX, e.offsetY]); moved = false; start = [e.offsetX, e.offsetY, view.tx, view.ty];
+  if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), s: view.s }; } });
+cv.addEventListener("pointermove", e => {
+  if (!ptrs.has(e.pointerId)) { hover(e); return; }
+  ptrs.set(e.pointerId, [e.offsetX, e.offsetY]);
+  if (ptrs.size === 2 && pinch) { const [a, b] = [...ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); moved = true; zoomAt(pinch.s * d / pinch.d / view.s, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); return; }
+  const dx = e.offsetX - start[0], dy = e.offsetY - start[1];
+  if (!moved && Math.hypot(dx, dy) > 6) { moved = true; cv.classList.add("drag"); $("tip").hidden = true; }
+  if (moved) { view.tx = start[2] + dx; view.ty = start[3] + dy; draw(); }
+});
+const up = e => { const wasTap = !moved && ptrs.size === 1; ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; cv.classList.remove("drag"); if (wasTap) tap(e.offsetX, e.offsetY); if (ptrs.size === 1) { const [p] = ptrs.values(); start = [p[0], p[1], view.tx, view.ty]; } };
+cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", e => { ptrs.delete(e.pointerId); pinch = null; });
+cv.addEventListener("pointerleave", () => { $("tip").hidden = true; hoverCell = null; draw(); });
+cv.addEventListener("wheel", e => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * .0015), e.offsetX, e.offsetY); }, { passive: false });
+$("zIn").onclick = () => zoomAt(1.8, W / 2, H / 2); $("zOut").onclick = () => zoomAt(1 / 1.8, W / 2, H / 2); $("zFit").onclick = () => { fit(); draw(); };
+
+function hover(e) {
+  if (e.pointerType !== "mouse") return;
+  const [x, y] = world(e.offsetX, e.offsetY), cell = cellAt(x, y), w = wardOf(cell.r, cell.c), tip = $("tip");
+  hoverCell = cell; draw();
+  if (w < 0) { tip.hidden = true; return; }
+  const p = owned.get(cell.r * 1000 + cell.c);
+  tip.innerHTML = p ? `<b>${esc(CATS[p.cat]?.e)} “${esc(p.msg)}”</b>${esc(p.name)} · ${esc(p.place)}` : `<b>${esc(placeOf(cell.r, cell.c))}</b>Ward ${WARDS[w].no}: ${esc(WARDS[w].name)} · ₹${price()}/cell`;
+  tip.hidden = false; tip.style.left = Math.min(e.offsetX + 14, W - 270) + "px"; tip.style.top = Math.min(e.offsetY + 14, H - 70) + "px";
+}
+
+function tap(px, py) {
+  const [x, y] = world(px, py), { r, c } = cellAt(x, y), k = r * 1000 + c, p = owned.get(k);
+  if (p) return showPlot(p);
+  if (wardOf(r, c) < 0) return toast("🚧 Outside city limits", "This land isn't in any BBMP ward. It's an unapproved layout, like half the ones sold on the outskirts. Pick a spot inside the city.");
+  if (CW * view.s < 9) { flyTo(x, y, 22 / CW); return; }
+  if (cart.has(k)) cart.delete(k);
+  else { if (cart.size >= CONFIG.maxCells) return toast("Easy, land baron", `Max ${CONFIG.maxCells} cells per order. Leave some city for the rest of us.`); cart.set(k, { r, c }); if (cart.size === 1) toast("📍 " + placeOf(r, c), quipOf(r, c)); }
+  updateCart(); draw();
+}
+function cartPlace() { const n = new Map(); for (const [, v] of cart) { const p = placeOf(v.r, v.c); n.set(p, (n.get(p) || 0) + 1); } return [...n].sort((a, b) => b[1] - a[1])[0][0]; }
+function updateCart() { $("cart").hidden = !cart.size; if (cart.size) $("cartTxt").innerHTML = `${cart.size} cell${cart.size > 1 ? "s" : ""} in ${esc(cartPlace())} · <em>${inr(cart.size * price())}</em>`; }
+$("clearBtn").onclick = () => { cart.clear(); updateCart(); draw(); };
+
+// ---------- plot story / toast ----------
+function showPlot(p) {
+  clearTimeout(toastT);
+  const cat = CATS[p.cat] || {}, [r, c] = p.cells[0];
+  const share = `“${p.msg}”, says a landowner in ${p.place} 😭\nFinally found land in Bengaluru I can afford: ₹${price()} a plot. No broker, no deposit, no landlord.\n${CONFIG.site}`;
+  $("storyBody").innerHTML = `<small>${esc(cat.e)} ${esc(cat.t)}${p.sample ? '<span class="tag">SAMPLE</span>' : ""}${p.house ? '<span class="tag">OFFICIAL</span>' : ""}</small>
+    <q>${esc(p.msg)}</q><div><b>${esc(p.name)}</b> · landowner in ${esc(p.place)}</div>
+    <small style="font-family:var(--f-mono)">Plot ${plotId(r, c)} · ${p.cells.length} cell${p.cells.length > 1 ? "s" : ""} · Ward: ${esc(WARDS[wardOf(r, c)].name)}</small>
+    <div class="row"><a class="btn wa sm" target="_blank" rel="noopener" href="${waLink(share)}">Share this rant</a>${p.url && /^https?:\/\//.test(p.url) ? `<a class="btn sm" target="_blank" rel="noopener nofollow" href="${esc(p.url)}">Visit ↗</a>` : ""}</div>`;
+  $("story").hidden = false;
+}
+let toastT = 0;
+function toast(t, m) { $("storyBody").innerHTML = `<q style="font-size:17px">${esc(t)}</q><p style="margin:0">${esc(m)}</p>`; $("story").hidden = false; clearTimeout(toastT); toastT = setTimeout(() => $("story").hidden = true, 4000); }
+$("storyX").onclick = () => $("story").hidden = true;
+$("randBtn").onclick = () => { const pool = plots.filter(p => !p.house); const list = pool.some(p => !p.sample) ? pool.filter(p => !p.sample) : pool; if (!list.length) return; const p = list[Math.floor(Math.random() * list.length)], [r, c] = p.cells[0]; flyTo((c + .5) * CW, (r + .5) * CH, 34 / CW); showPlot(p); };
+
+// filter chips
+$("chips").innerHTML = `<button class="chip" aria-pressed="true" data-k="">All rants</button>` + Object.entries(CATS).map(([k, v]) => `<button class="chip" aria-pressed="false" data-k="${k}">${v.e} ${v.t}</button>`).join("");
+$("chips").onclick = e => { const b = e.target.closest(".chip"); if (!b) return; filter = b.dataset.k || null; $("chips").querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); };
+
+// search
+const PLACES = new Map(); AREAS.forEach(a => PLACES.set(a.name, [a.x, a.y, 7 / CW])); WARDS.forEach(w => { if (!PLACES.has(w.name)) PLACES.set(w.name, [w.cx, w.cy, 9 / CW]); });
+$("places").innerHTML = [...PLACES.keys()].sort().map(n => `<option value="${esc(n)}">`).join("");
+$("search").addEventListener("change", e => { const q = e.target.value.trim().toLowerCase(), hit = [...PLACES].find(([n]) => n.toLowerCase() === q) || [...PLACES].find(([n]) => n.toLowerCase().includes(q)); if (hit) { flyTo(hit[1][0], hit[1][1], 16 / CW); document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "start" }); } });
+
+// ---------- order flow ----------
+$("fCat").innerHTML = Object.entries(CATS).map(([k, v]) => `<option value="${k}">${v.e} ${v.t}</option>`).join("");
+let paint = PAINTS[0], order = null;
+$("paints").innerHTML = PAINTS.map(p => `<button type="button" style="background:${p}" data-p="${p}" aria-label="Colour ${p}" aria-pressed="false"></button>`).join("");
+$("paints").onclick = e => { const b = e.target.closest("button"); if (b) { paint = b.dataset.p; preview(); } };
+function preview() { $("paints").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.p === paint)); $("preview").style.background = paint; $("preview").textContent = `${CATS[$("fCat").value].e} ${$("fMsg").value || "Your rant appears here"}`; }
+["fMsg", "fCat"].forEach(id => $(id).addEventListener("input", preview));
+const step = n => ["st1", "st2", "st3"].forEach((s, i) => $(s).classList.toggle("on", i === n - 1));
+$("buyBtn").onclick = () => {
+  const cells = [...cart.values()].map(v => [v.r, v.c]), place = cartPlace(), pr = price();
+  order = { id: "TRE-" + Math.random().toString(36).slice(2, 7).toUpperCase(), cells, place, amt: cells.length * pr, plot: plotId(cells[0][0], cells[0][1]) };
+  $("dMeta").textContent = `Plot ${order.plot} · ${place} · ${cells.length} cell${cells.length > 1 ? "s" : ""} · ${inr(order.amt)}`;
+  $("err1").textContent = ""; preview(); step(1); $("dlg").showModal();
+};
+$("close1").onclick = $("close3").onclick = () => $("dlg").close();
+$("back2").onclick = () => step(1);
+$("toPay").onclick = () => {
+  if (!$("fName").value.trim() || !$("fMsg").value.trim()) { $("err1").textContent = "Add your name and your rant to continue."; return; }
+  const upi = `upi://pay?pa=${encodeURIComponent(CONFIG.upiId)}&pn=${encodeURIComponent(CONFIG.payee)}&am=${order.amt}&cu=INR&tn=${order.id}`;
+  $("payMeta").textContent = `${inr(order.amt)} · Order ${order.id}. No stamp duty, no khata fee, no "chai-pani".`;
+  $("upiTxt").textContent = CONFIG.upiId; $("upiLink").href = upi; $("qr").innerHTML = "";
+  if (window.QRCode) new QRCode($("qr"), { text: upi, width: 168, height: 168 }); else $("qr").textContent = "Scan unavailable. Use the UPI ID below.";
+  $("err2").textContent = ""; refreshSend(); step(2);
+};
+$("upiCopy").onclick = () => navigator.clipboard?.writeText(CONFIG.upiId).then(() => $("upiCopy").textContent = "Copied", () => {});
+function orderData() { return { name: $("fName").value.trim(), cat: $("fCat").value, msg: $("fMsg").value.trim(), color: paint, url: $("fUrl").value.trim(), utr: $("fUtr").value.trim() }; }
+function refreshSend() {
+  const o = { ...order, ...orderData() };
+  const json = JSON.stringify({ cells: o.cells, name: o.name, cat: o.cat, msg: o.msg, color: o.color, url: o.url });
+  $("sendBtn").href = waLink(`🏗️ TEN RUPEE ESTATES · ORDER ${o.id}\nPlot ${o.plot} · ${o.place} · ${o.cells.length} cells\nAmount: ₹${o.amt}\nUTR: ${o.utr}\nName: ${o.name}\nRant: ${o.msg}\n\nDATA ${json}`, CONFIG.whatsapp);
+}
+$("fUtr").addEventListener("input", refreshSend);
+$("sendBtn").addEventListener("click", e => {
+  if (!/^\w{10,22}$/.test($("fUtr").value.trim())) { e.preventDefault(); $("err2").textContent = "Enter the UTR from your UPI app so we can match your payment."; return; }
+  const o = { ...order, ...orderData() }; makeLetter(o); step(3); cart.clear(); updateCart(); draw();
+});
+
+// ---------- allotment letter ----------
+function makeLetter(o) {
+  const S = 1080, k = document.createElement("canvas"); k.width = S; k.height = 1350; const x = k.getContext("2d");
+  const NAVY = "#0d1b2a", GOLD = "#d4a84a", PAPER = "#f7f4ee";
+  x.fillStyle = PAPER; x.fillRect(0, 0, S, 1350);
+  x.fillStyle = NAVY; x.fillRect(0, 0, S, 170); x.fillStyle = GOLD; x.fillRect(0, 170, S, 8);
+  x.textAlign = "left"; x.fillStyle = "#fff"; x.font = '900 54px Unbounded, "Arial Black", sans-serif'; x.fillText("TEN RUPEE", 70, 92); x.fillStyle = GOLD; x.fillText("ESTATES", 70, 148);
+  x.textAlign = "right"; x.fillStyle = "#c9d3e0"; x.font = '600 22px "JetBrains Mono", monospace'; x.fillText("ALLOTMENT LETTER", S - 70, 90); x.fillText(new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }), S - 70, 126);
+  x.textAlign = "left"; x.fillStyle = "#5a6577"; x.font = '500 28px Manrope, sans-serif'; x.fillText("This is to certify that", 70, 260);
+  x.fillStyle = NAVY; x.font = '800 76px Manrope, sans-serif'; x.fillText(o.name, 70, 345, S - 140);
+  x.fillStyle = "#5a6577"; x.font = '500 28px Manrope, sans-serif'; x.fillText("is the proud owner of", 70, 400);
+  x.fillStyle = NAVY; x.font = '900 60px Unbounded, "Arial Black", sans-serif'; x.fillText(`Plot ${o.plot}`, 70, 480, S - 140);
+  x.fillStyle = "#2b8a3e"; x.font = '800 36px Manrope, sans-serif'; x.fillText(`${o.place}, Bengaluru · ${o.cells.length} cell${o.cells.length > 1 ? "s" : ""}`, 70, 535, S - 140);
+  // site plan: real ward outlines with the plot pinned
+  const mx = 70, my = 580, mw = 440, mh = 420, bw = G.cols * CW, bh = G.rows * CH, ms = Math.min(mw / bw, mh / bh);
+  x.fillStyle = "#e9eef5"; x.fillRect(mx, my, mw, mh);
+  x.save(); x.translate(mx + (mw - bw * ms) / 2, my + (mh - bh * ms) / 2); x.scale(ms, ms);
+  x.fillStyle = "#fff"; x.strokeStyle = "#b7c2d2"; x.lineWidth = .8 / ms; WARDS.forEach(w => { x.fill(w.path); x.stroke(w.path); });
+  const [pr, pc] = o.cells[0], cx = (pc + .5) * CW, cy = (pr + .5) * CH;
+  x.fillStyle = "#e03131"; x.beginPath(); x.arc(cx, cy, 9 / ms, 0, 7); x.fill(); x.strokeStyle = "#fff"; x.lineWidth = 3 / ms; x.stroke();
+  x.restore(); x.fillStyle = "#5a6577"; x.font = '600 18px "JetBrains Mono", monospace'; x.fillText("SITE PLAN · BBMP LIMITS", mx, my + mh + 30);
+  // terms
+  const rows = [["Price paid", inr(o.amt)], ["Security deposit", "₹0"], ["Brokerage", "₹0"], ["Maintenance", "₹0"], ["Landlord", "You"], ["Possession", "Immediate"]];
+  rows.forEach(([a, b], i) => { const y = 620 + i * 64; x.fillStyle = "#5a6577"; x.font = '500 26px Manrope, sans-serif'; x.textAlign = "left"; x.fillText(a, 560, y); x.fillStyle = NAVY; x.font = '800 30px Manrope, sans-serif'; x.textAlign = "right"; x.fillText(b, S - 70, y); x.fillStyle = "#dde2ea"; x.fillRect(560, y + 20, S - 630, 2); });
+  x.textAlign = "left";
+  // rant
+  x.fillStyle = o.color; x.fillRect(70, 1070, S - 140, 130);
+  x.fillStyle = "#fff"; x.font = '800 36px Manrope, sans-serif'; x.fillText(`${CATS[o.cat].e} “${o.msg}”`, 100, 1146, S - 200);
+  // stamp
+  x.save(); x.translate(S - 190, 330); x.rotate(-.28); x.strokeStyle = "#e03131cc"; x.lineWidth = 5; x.beginPath(); x.arc(0, 0, 92, 0, 7); x.stroke(); x.beginPath(); x.arc(0, 0, 80, 0, 7); x.stroke();
+  x.fillStyle = "#e03131cc"; x.textAlign = "center"; x.font = '800 22px "JetBrains Mono", monospace'; x.fillText("NO BROKER", 0, -12); x.fillText("NO DEPOSIT", 0, 20); x.restore();
+  x.fillStyle = "#8a93a3"; x.font = '500 20px Manrope, sans-serif'; x.textAlign = "center"; x.fillText("Satire. A spot on a map, not real land. The frustration, however, is fully registered.", S / 2, 1280);
+  x.fillText(CONFIG.site.replace(/^https?:\/\//, ""), S / 2, 1312);
+  const url = k.toDataURL("image/png"); $("letterImg").src = url; $("letterDl").href = url;
+  $("letterDl").hidden = /claude|anthropic/.test(location.hostname);   // the preview host blocks downloads; long-press saving still works
+  $("letterShare").href = waLink(`I finally own land in ${o.place}, Bengaluru 🏡\nPaid ${inr(o.amt)}. Deposit ₹0. Brokerage ₹0. Landlord: me.\nNavratri pre-launch offer ends soon: ${CONFIG.site}`);
+}
+
+// ---------- rent reality check ----------
+function rent() {
+  const r = Math.max(0, +$("rRent").value || 0), d = Math.max(0, +$("rDep").value || 0), pr = price(), dep = r * d;
+  const rc = Math.floor(r / pr), dc = Math.floor(dep / pr), kor = areaCells.get("Koramangala") || 1, times = dc / kor, city = dc / TOTAL * 100;
+  const korTxt = times >= 1 ? `all of Koramangala ${times.toFixed(1)} times over` : `${(times * 100).toFixed(0)}% of Koramangala`;
+  $("rOut").innerHTML = `<p class="big">${num(rc)} cells</p><p style="margin:0">One month's rent buys ${num(rc)} cells here.</p><p style="margin:8px 0 0">Your ${inr(dep)} deposit buys <b>${korTxt}</b>, or ${city.toFixed(1)}% of Bengaluru. 🫠</p>`;
+  const text = `I pay ${inr(r)} rent in Bengaluru 😭\nOn Ten Rupee Estates that's ${num(rc)} plots a month.\nMy deposit alone could buy ${korTxt}.\nCheck yours: ${CONFIG.site}`;
+  $("rShare").href = waLink(text); $("rCopy").onclick = () => navigator.clipboard?.writeText(text).then(() => $("rCopy").textContent = "Copied", () => {});
+}
+["rRent", "rDep"].forEach(id => $(id).addEventListener("input", rent));
+
+// ---------- stats, feed, leaderboard ----------
+function refreshStats() {
+  const real = plots.filter(p => !p.house && !p.sample), useSample = !real.length, list = useSample ? plots.filter(p => p.sample) : real;
+  const sold = real.reduce((s, p) => s + p.cells.length, 0), by = new Map();
+  for (const p of list) by.set(p.place, (by.get(p.place) || 0) + p.cells.length);
+  const top = [...by].sort((a, b) => b[1] - a[1]);
+  $("sOwners").textContent = num(real.length); $("sCells").textContent = num(sold); $("sLeft").textContent = num(TOTAL - owned.size);
+  $("sTop").textContent = real.length ? top[0][0] : "Nobody yet";
+  $("feedNote").textContent = useSample ? "Sample rants until the first real plot is sold." : "Straight from the landowners.";
+  $("feed").innerHTML = list.slice(-7).reverse().map((p, i) => `<button class="rant" data-i="${plots.indexOf(p)}"><span class="e">${CATS[p.cat]?.e || "📍"}</span><q>${esc(p.msg)}</q><small>${esc(p.name)} · ${esc(p.place)}${p.sample ? '<span class="tag">SAMPLE</span>' : ""}</small></button>`).join("") || "<small>No rants yet.</small>";
+  $("lbNote").textContent = useSample ? "Showing sample data until real plots sell." : "Cells sold per area. Rivalry encouraged.";
+  const max = top[0]?.[1] || 1;
+  $("lb").innerHTML = top.slice(0, 6).map(([n, v]) => `<div><span>${esc(n)}</span><small>${num(v)} cells</small><i style="width:${v / max * 100}%"></i></div>`).join("");
+  const lead = real.length ? top[0] : null;
+  $("lbShare").href = waLink(lead ? `${lead[0]} is Bengaluru's most frustrated area right now 😤 (${lead[1]} cells of rants). Is your area suffering less? Prove it: ${CONFIG.site}` : `Which Bengaluru area is most fed up with rent? The leaderboard is empty. Claim it for yours: ${CONFIG.site}`);
+}
+$("feed").onclick = e => { const b = e.target.closest(".rant"); if (!b) return; const p = plots[+b.dataset.i], [r, c] = p.cells[0]; flyTo((c + .5) * CW, (r + .5) * CH, 34 / CW); document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "start" }); showPlot(p); };
+
+// ---------- Navratri countdown ----------
+function tick() {
+  const ms = Date.parse(CONFIG.offerEnds) - Date.now(), pr = price();
+  document.querySelectorAll(".pr").forEach(e => e.textContent = pr); $("pNow").textContent = pr;
+  if (ms <= 0) { $("countdown").textContent = "ended"; $("pAfter").textContent = `Offer over. ₹${pr}/cell, as promised by every builder ever.`; return; }
+  const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
+  $("countdown").textContent = `${d}d ${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
+  $("pAfter").textContent = `Then ₹${CONFIG.priceAfter}/cell. Like every builder, we will raise prices.`;
+}
+setInterval(tick, 1000); tick();
+
+// ---------- boot ----------
+readColors();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readColors(); draw(); });
+new MutationObserver(() => { readColors(); draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+new ResizeObserver(resize).observe(box);
+document.fonts?.ready.then(draw);
+rent();
+loadPlots(window.PLOTS || []);
+fetch("plots.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(d => { if (d && d.plots) loadPlots(d.plots); }).catch(() => {});
+</script>

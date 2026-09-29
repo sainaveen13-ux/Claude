@@ -24,19 +24,22 @@ A satirical "real estate developer" that sells plots on a **real map of Bengalur
 - A Rupaya Files video: "I sold all of Koramangala for ₹10 a plot."
 - Timing: post on the 1st of the month (rent day) and at the peak of the 11-month lease-renewal season.
 
+## How the code is organised
+- `app.html` is the source you edit. Run `./build.sh` to produce `index.html` (the GitHub Pages site) and `dist/artifact.html` (the claude.ai preview).
+- `geo.js` holds the real **BBMP 243-ward boundaries** (DataMeet, CC BY 4.0), simplified to about 27 m and baked into a grid of 26,258 sellable cells inside city limits. Rebuild it with `python3 tools/build_geo.py BBMP.geojson geo.js`.
+- There are no map tiles and no map service; the city is drawn from that data. Neighbourhood names (Koramangala, HSR and so on) label every cell within 2.2 km of their approximate centre. All other cells use the official ward name.
+- `plots.json` holds sold plots. Entries marked `"sample": true` are demo rants that show until the first real sale. **Delete them before launch.**
+
+## Navratri offer
+`CONFIG.offerEnds` is set to Ghatasthapana (11 Oct 2026, 6:00 AM IST). The price switches automatically from `priceOffer` (₹10) to `priceAfter` (₹15), and the banner counts down.
+
 ## Go live (your part)
-1. In `index.html`, set `CONFIG.upiId` and `CONFIG.whatsapp` (for example `919876543210`).
+1. In `app.html`, set `CONFIG.upiId`, `CONFIG.whatsapp` and `CONFIG.site`, then run `./build.sh`.
 2. Merge to `main`, then **Settings → Pages → Deploy from branch `main`**. The site will be at `https://<user>.github.io/<repo>/blr/`.
-3. Buy the first 3–5 plots yourself (a Koramangala deposit rant, a Silk Board traffic rant, and so on) so the map isn't empty.
+3. Replace the sample plots with 3–5 real ones you buy yourself.
 
 ## Fulfilling an order
-The WhatsApp order includes a `DATA: {...}` line. Paste that JSON into the `plots` array in `plots.json` and commit; it's live in about a minute. You can also paste the WhatsApp message to Claude and it will do this for you.
+The WhatsApp order includes a `DATA {...}` line. Paste that JSON into `plots` in `plots.json` and commit. The next step is to automate this (UPI gateway plus a serverless function).
 
-**Heads-up:** at ₹10 per cell, doing this by hand for every order won't scale if the site goes viral. The next upgrade is automating it: a UPI payment gateway such as Razorpay plus a small serverless function that writes plots automatically.
-
-## Before real traffic arrives
-- **Map tiles:** the site uses CARTO's free basemap. For heavy traffic, switch to a free-tier key from MapTiler or Stadia (a one-line change).
-- **Locality coordinates** are approximate city centres and were entered by hand. Each cell belongs to its nearest locality within 3.2 km.
-- **Moderation:** no politics, no hate against any community, no abuse, no naming of real people or landlords. Refund anything rejected.
-- The whole thing is labelled as parody everywhere. No real land, approval or title is offered.
-- Keep a sheet of UTRs, because this is taxable income.
+## Rules
+No politics, no hate against any community, no abuse, no real names of people or landlords, no phone numbers. Refund anything rejected. It's labelled as satire everywhere, and there is no real land, approval or title. Keep a sheet of UTRs, because this is taxable income.
