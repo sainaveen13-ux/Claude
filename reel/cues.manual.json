@@ -1,0 +1,110 @@
+{
+ "cues": [
+  {
+   "id": "hook",
+   "start": 0.61,
+   "end": 2.37
+  },
+  {
+   "id": "relax",
+   "start": 2.75,
+   "end": 4.26
+  },
+  {
+   "id": "intro",
+   "start": 4.74,
+   "end": 9.55
+  },
+  {
+   "id": "broker",
+   "start": 10.02,
+   "end": 10.67
+  },
+  {
+   "id": "deposit",
+   "start": 11.03,
+   "end": 12.38
+  },
+  {
+   "id": "landlord",
+   "start": 12.75,
+   "end": 15.22
+  },
+  {
+   "id": "wards",
+   "start": 15.75,
+   "end": 18.88
+  },
+  {
+   "id": "pick",
+   "start": 19.27,
+   "end": 21.91
+  },
+  {
+   "id": "write",
+   "start": 22.17,
+   "end": 23.4
+  },
+  {
+   "id": "city",
+   "start": 23.94,
+   "end": 25.23
+  },
+  {
+   "id": "roast",
+   "start": 25.77,
+   "end": 29.83
+  },
+  {
+   "id": "amen",
+   "start": 30.32,
+   "end": 32.06
+  },
+  {
+   "id": "pool",
+   "start": 32.4,
+   "end": 34.2
+  },
+  {
+   "id": "lake",
+   "start": 34.67,
+   "end": 36.95
+  },
+  {
+   "id": "metro",
+   "start": 37.45,
+   "end": 40.71
+  },
+  {
+   "id": "lux",
+   "start": 41.29,
+   "end": 43.76
+  },
+  {
+   "id": "you",
+   "start": 44.25,
+   "end": 45.74
+  },
+  {
+   "id": "brand",
+   "start": 46.32,
+   "end": 47.73
+  },
+  {
+   "id": "hurry",
+   "start": 48.4,
+   "end": 50.76
+  },
+  {
+   "id": "builder",
+   "start": 51.23,
+   "end": 52.21
+  },
+  {
+   "id": "bio",
+   "start": 52.7,
+   "end": 53.36
+  }
+ ],
+ "duration": 55.56
+}

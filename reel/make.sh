@@ -21,5 +21,5 @@ $FF -hide_banner -loglevel error -y -framerate 30 -i build/frames/f%05d.jpg -i b
 [mus][key]sidechaincompress=threshold=0.04:ratio=6:attack=15:release=300[duck];\
 [3:a]aresample=48000,aformat=channel_layouts=stereo,volume=0.5[fx];\
 [vo][duck][fx]amix=inputs=3:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11,aformat=channel_layouts=stereo[a]" \
--map 0:v -map "[a]" -c:v libx264 -preset slow -crf 18 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart -shortest build/ten-rupee-estates-reel.mp4
+-map 0:v -map "[a]" -c:v libx264 -preset slow -crf 18 -pix_fmt yuv420p -c:a aac -b:a 192k -ar 48000 -movflags +faststart -shortest build/ten-rupee-estates-reel.mp4
 echo "done: reel/build/ten-rupee-estates-reel.mp4 (${DUR}s)"

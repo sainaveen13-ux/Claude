@@ -170,7 +170,7 @@ function drawMap(t) {
   if (z > .4) { mc.globalAlpha = (z - .4) / .6 * .6; mc.strokeStyle = "rgba(224,180,88,.7)"; mc.lineWidth = 1 / s; mc.beginPath();
     const c0 = Math.floor((cx - 540/s)/CW), c1 = Math.ceil((cx + 540/s)/CW), r0 = Math.floor((cy - 1000/s)/CH), r1 = Math.ceil((cy + 920/s)/CH);
     for (let r=r0;r<=r1;r++) for (let c=c0;c<=c1;c++) mc.rect(c*CW, r*CH, CW, CH); mc.stroke(); mc.globalAlpha = 1; }
-  const fk = eBack(p(t, C("pick", .45), .4));
+  const fk = eBack(p(t, C("pick", .32), .4));
   if (fk > 0) { const r = Math.floor((KOR[1]+.15)/CH), c = Math.floor((KOR[0]+.25)/CW), sc = .2 + .8 * fk;
     mc.fillStyle = "#f7b733"; mc.shadowColor = "#f7b733"; mc.shadowBlur = 40; mc.fillRect(c*CW + CW*(1-sc)/2, r*CH + CH*(1-sc)/2, CW*sc, CH*sc); mc.shadowBlur = 0; }
   const lk = eOut(p(t, C("pick") + .3, .5));
@@ -197,12 +197,12 @@ window.render = function (t) {
     set("g1", { o: .15 + .35 * eOut(p(t, C("intro", .8), .6)), s: .8 + .3 * eOut(p(t, C("intro", .8), 1)) });
     { const k = eBack(p(t, 0, .35)), out = eInOut(p(t, C("intro") - .1, .4)); set("hook", { o: cl(.35 + k) * (1 - out), s: (.94 + .06 * k) * (1 - .06 * out), y: -out * 80, b: out * 18 }); }
     textIn($("relax"), t, C("relax"), .35, C("intro") - .1, .3);
-    textIn($("intro"), t, C("intro"), .45, C("intro", .28), .3);
-    textIn($("land"), t, C("intro", .32), .5);
-    textIn($("inblr"), t, C("intro", .5), .5);
-    textIn($("for"), t, C("intro", .68), .35);
-    const k = eBack(p(t, C("intro", .8), .5)); set("price", { o: cl(k * 1.5), s: .6 + .4 * k, b: (1 - cl(k)) * 20 });
-    const lift = eInOut(p(t, C("intro", .8), .6)) * -60;
+    textIn($("intro"), t, C("intro"), .45, C("intro", .19), .25);
+    textIn($("land"), t, C("intro", .23), .5);
+    textIn($("inblr"), t, C("intro", .40), .5);
+    textIn($("for"), t, C("intro", .64), .35);
+    const k = eBack(p(t, C("intro", .76), .5)); set("price", { o: cl(k * 1.5), s: .6 + .4 * k, b: (1 - cl(k)) * 20 });
+    const lift = eInOut(p(t, C("intro", .76), .6)) * -60;
     ["land","inblr","for"].forEach(id => { $(id).style.transform += ` translateY(${lift}px)`; });
   }
   if (sc === "s2") {
@@ -220,9 +220,9 @@ window.render = function (t) {
     drawMap(t);
     $("wn").textContent = Math.round(243 * eOut(p(t, C("wards"), Math.max(1.2, C("wards", 1) - C("wards")))));
     textIn($("wcount"), t, C("wards") - .1, .5, C("pick") - .2, .35);
-    textIn($("pick"), t, C("pick"), .4, C("pick", .55), .25);
-    const yk = eBack(p(t, C("pick", .62), .4)); set("yours", { o: cl(yk * 1.5), s: .7 + .3 * yk });
-    const ck = eInOut(p(t, C("pick") - .1, .6)), tk = p(t, C("pick", .42), .22), press = tk > 0 && tk < 1 ? 1 - Math.sin(tk * Math.PI) * .25 : 1;
+    textIn($("pick"), t, C("pick"), .35, C("pick", .5), .2);
+    const yk = eBack(p(t, C("pick", .55), .4)); set("yours", { o: cl(yk * 1.5), s: .7 + .3 * yk });
+    const ck = eInOut(p(t, C("pick") - .1, .6)), tk = p(t, C("pick", .29), .22), press = tk > 0 && tk < 1 ? 1 - Math.sin(tk * Math.PI) * .25 : 1;
     set("cur", { o: cl((t - C("pick") + .1) * 3) * (1 - p(t, C("pick", 1), .3)), x: 760 - 260 * ck, y: 1300 - 330 * ck, s: press });
   }
   if (sc === "s4") {
@@ -238,12 +238,12 @@ window.render = function (t) {
     const card = (id, cue, next) => { const i = eExpo(p(t, C(cue) - .1, .6)), o = next ? eInOut(p(t, C(next) - .2, .35)) : 0;
       set(id, { o: i * (1 - o), y: (1 - i) * 200 - o * 160, s: .92 + .08 * i - .06 * o }); };
     card("pool", "pool", "lake"); card("lake", "lake", "metro"); card("metro", "metro", null);
-    $("poolp").style.opacity = eOut(p(t, C("pool", .45), .4));
-    const rain = eOut(p(t, C("pool", .4), .5)) * (1 - eInOut(p(t, C("lake") - .2, .3))); drawRain(t, rain);
-    const lvl = eInOut(p(t, C("pool", .5), 1.2)) * (1 - eInOut(p(t, C("lake") - .2, .4))); $("water").style.height = `${lvl * 700}px`; $("water").style.borderRadius = "50% 50% 0 0 / 40px 40px 0 0";
+    $("poolp").style.opacity = eOut(p(t, C("pool", .58), .4));
+    const rain = eOut(p(t, C("pool", .55), .5)) * (1 - eInOut(p(t, C("lake") - .2, .3))); drawRain(t, rain);
+    const lvl = eInOut(p(t, C("pool", .6), 1.2)) * (1 - eInOut(p(t, C("lake") - .2, .4))); $("water").style.height = `${lvl * 700}px`; $("water").style.borderRadius = "50% 50% 0 0 / 40px 40px 0 0";
     if (lvl > 0) $("pool").style.transform += ` translateY(${Math.sin(t * 5) * 10 * lvl}px) rotate(${Math.sin(t * 3.3) * 1.2 * lvl}deg)`;
-    drawFoam(t, eOut(p(t, C("lake", .45), .6)) * (1 - eInOut(p(t, C("metro") - .2, .3))));
-    const yk = eInOut(p(t, C("metro", .55), Math.max(.6, C("metro", 1) - C("metro", .55)))); $("yr").textContent = t < C("metro", .55) ? "2012" : String(2012 + Math.round(14 * yk)) === "2026" ? "2012 😐" : String(2012 + Math.round(14 * yk));
+    drawFoam(t, eOut(p(t, C("lake", .62), .6)) * (1 - eInOut(p(t, C("metro") - .2, .3))));
+    const yk = eInOut(p(t, C("metro", .7), Math.max(.6, C("metro", 1) - C("metro", .7)))); $("yr").textContent = t < C("metro", .7) ? "2012" : String(2012 + Math.round(14 * yk)) === "2026" ? "2012 😐" : String(2012 + Math.round(14 * yk));
   }
   if (sc === "s6") {
     textIn($("lux"), t, C("lux") - .05, .6);
@@ -251,13 +251,13 @@ window.render = function (t) {
     el.style.opacity = lk; el.style.transformOrigin = "78% 66%";
     el.style.transform = `translateY(${-560 + (1 - lk) * 700 - zk * 120}px) perspective(1600px) rotateX(${(1 - lk) * 28}deg) scale(${.9 + .06 * lk + .03 * p(t, C("lux") + 1.2, 1) + zk * 1.05})`;
     $("lux").style.opacity = String(+$("lux").style.opacity * (1 - zk)); $("shade").style.opacity = zk;
-    const yk = eBack(p(t, C("you", .35), .45)); set("youl", { o: cl(yk * 1.5), s: .7 + .3 * yk });
+    const yk = eBack(p(t, C("you", .42), .45)); set("youl", { o: cl(yk * 1.5), s: .7 + .3 * yk });
   }
   if (sc === "s7") {
     const bk = eExpo(p(t, C("brand") - .05, .8)); set("brand", { o: bk, s: .9 + .1 * bk, b: (1 - bk) * 30 }); set("g7", { o: .1 + .3 * bk, s: .7 + .3 * bk });
     const hk = eBack(p(t, C("hurry"), .35)), h0 = C("hurry") + .35, shake = t > h0 && t < h0 + .6 ? Math.sin(t * 60) * 10 * (1 - p(t, h0, .6)) : 0;
     set("hurry", { o: cl(hk * 1.5), s: .6 + .4 * hk, x: shake });
-    textIn($("navr"), t, C("hurry", .3), .45); textIn($("cd"), t, C("hurry", .75), .45);
+    textIn($("navr"), t, C("hurry", .24), .45); textIn($("cd"), t, C("hurry", .75), .45);
     const base = Date.parse("2026-10-11T06:00:00+05:30") - Date.parse("2026-10-01T09:00:00+05:30") - Math.max(0, t - C("hurry", .75)) * 1000;
     const d = Math.floor(base / 864e5), h = Math.floor(base / 36e5) % 24, m = Math.floor(base / 6e4) % 60, s = Math.floor(base / 1e3) % 60;
     $("cdv").textContent = `${d}d ${String(h).padStart(2,"0")}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`;
