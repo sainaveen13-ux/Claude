@@ -21,6 +21,7 @@
   --bg:#08121e; --surface:#0f1d2e; --fg:#eef2f7; --mut:#93a1b5; --line:#1f3048;
   --gold:#e0b458; --gold-soft:#2a2414; --map-bg:#0b1726; --ward:#12243a; --ward-alt:#152a43; --ward-line:#27405f; --grid:rgba(224,180,88,.16); --label:#ffffff; --halo:#050b13; --pill-bg:#f2d48a; --pill-fg:#0d1b2a; color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body)}
 a{color:var(--gold)}
@@ -105,6 +106,23 @@ label{display:block;font-size:13px;font-weight:700;color:var(--mut);margin:12px 
 .faq details{border-top:1px solid var(--line);padding:12px 0}
 .faq summary{font-weight:800;cursor:pointer}
 .faq p{margin:8px 0 0;color:var(--mut)}
+.amen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.amen div{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--surface);min-width:0}
+.amen b{display:block;font-size:17px}
+.amen small{color:var(--mut)}
+.vs{width:100%;border-collapse:collapse;font-size:15px}
+.vs th,.vs td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.vs th{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.vs td:last-child{font-weight:800;color:var(--ok)}
+.vs td:nth-child(2){color:var(--alert)}
+.tblwrap{overflow-x:auto;border:1.5px solid var(--line);border-radius:14px;background:var(--surface)}
+.fine{font-size:12px;color:var(--mut);margin:8px 0 0}
+.broker{position:fixed;right:16px;top:calc(64px + env(safe-area-inset-top,0px));z-index:70;width:min(340px,calc(100% - 32px));background:var(--surface);border:1.5px solid var(--fg);border-radius:16px;padding:14px 16px;box-shadow:0 16px 50px #0006}
+.broker .who{display:flex;gap:10px;align-items:center;font-weight:800}
+.broker .av{width:36px;height:36px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+.broker p{margin:8px 0 0;font-size:14px}
+@media (max-width:900px){.amen{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.amen{grid-template-columns:1fr}}
 footer{border-top:1.5px solid var(--fg);margin-top:20px;padding-block:22px 40px;color:var(--mut);font-size:13px}
 
 /* dialogs */
@@ -157,6 +175,7 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
       <h1>Can't afford a house in Bengaluru? Own land for <span class="price">₹10.</span></h1>
       <p class="lede">Pick a cell anywhere inside city limits and it's yours. Write your frustration on it so the whole city can read it.</p>
       <div class="cta"><a class="btn gold" href="#map">Pick my plot →</a><a class="btn ghost" href="#rent">Check my rent pain</a></div>
+      <p class="fine">*T&amp;C: ₹10 excludes GST, parking, club membership, and your peace of mind. Just kidding. It's ₹10.<br>🔥 <span id="brokersViewing">14</span> brokers are viewing this page right now. They are not happy.</p>
     </div>
     <div class="stickers" aria-label="What you don't pay">
       <span class="sticker"><s>Broker</s> ₹0</span>
@@ -171,7 +190,7 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
   <div class="stats" aria-live="polite">
     <div><b id="sOwners">0</b><small>landowners</small></div>
     <div><b id="sCells">0</b><small>cells sold</small></div>
-    <div><b id="sLeft">26,258</b><small>cells left in the city</small></div>
+    <div><b id="sLeft">26,258</b><small>cells left ("last few units")</small></div>
     <div><b id="sTop">Nobody yet</b><small>most frustrated area</small></div>
   </div>
 
@@ -227,12 +246,42 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
   </section>
 
   <section>
+    <h2>World-class amenities</h2>
+    <div class="amen">
+      <div><b>🏊 Infinity pool</b><small>Available every monsoon, right on the main road.</small></div>
+      <div><b>🚇 Metro connectivity</b><small>Upcoming. It has been upcoming since 2012.</small></div>
+      <div><b>💧 24×7 water*</b><small>*Delivered by tanker. Timings decided by the tanker.</small></div>
+      <div><b>🏋️ Fitness centre</b><small>Carrying 20-litre cans up four floors when the lift is under maintenance.</small></div>
+      <div><b>🌳 Lung space</b><small>Fresh Silk Board air, filtered through 4,000 exhaust pipes.</small></div>
+      <div><b>🧘 Meditation zone</b><small>Your two-hour ORR commute. Very calming, once you give up.</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Market rate vs Ten Rupee Estates</h2>
+    <div class="tblwrap"><table class="vs">
+      <thead><tr><th>What you pay</th><th>Bengaluru market</th><th>Ten Rupee Estates</th></tr></thead>
+      <tbody>
+        <tr><td>Security deposit</td><td>Up to 10 months' rent</td><td>₹0</td></tr>
+        <tr><td>Brokerage</td><td>One month's rent, for opening a door</td><td>₹0</td></tr>
+        <tr><td>Annual hike</td><td>"Market rate, sir"</td><td>Never. Well, after Navratri.</td></tr>
+        <tr><td>Painting charges on exit</td><td>Somehow always one month's rent</td><td>Your plot stays painted forever</td></tr>
+        <tr><td>Society rules</td><td>A 47-page PDF with rules like "no guests after 9 PM"</td><td>One rule: be decent</td></tr>
+        <tr><td>Landlord visits</td><td>"Just checking the flat"</td><td>You are the landlord</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <details><summary>Is this BDA approved?</summary><p>No. It is approved by everyone who has ever paid a 10-month deposit.</p></details>
       <details><summary>When do I get possession?</summary><p>Immediately. Unlike that pre-launch flat you booked in 2019.</p></details>
       <details><summary>Is it near the metro?</summary><p>Every plot is near an upcoming metro. We just don't say which decade.</p></details>
       <details><summary>Can I build a house on it?</summary><p>You can build a rant on it. That is more than your current rent allows.</p></details>
+      <details><summary>Is it Vastu compliant?</summary><p>Every cell faces some direction. We checked all four.</p></details>
+      <details><summary>Is there a maintenance charge?</summary><p>No. We learned from your apartment association and decided not to become one.</p></details>
+      <details><summary>Can I sublet my plot?</summary><p>Only to bachelors, non-vegetarians and people with pets. We are making up for lost time.</p></details>
       <details><summary>Is this real land?</summary><p>No. Ten Rupee Estates is satire. Your plot is a spot on a map and a line of text. The frustration is real.</p></details>
       <details><summary>What can't I write?</summary><p>Politics, hate against any community, abuse, real names of people or landlords, phone numbers, betting or adult content. We refund anything we reject.</p></details>
     </div>
@@ -241,6 +290,12 @@ dialog h3{font-family:var(--f-display);font-size:22px;margin:0}
   <footer>
     Ten Rupee Estates is a satire project by <a href="https://www.youtube.com/channel/UCM7V8bVh9bpH1moXSati8Hw" target="_blank" rel="noopener">Rupaya Files</a>. Plots are cells on a map, not real property, and no approval, title or ownership is offered or implied. Ward boundaries © BBMP, published by DataMeet under CC BY 4.0. Landmark positions are approximate.
   </footer>
+</div>
+
+<div class="broker" id="broker" role="dialog" aria-label="Message from a broker" hidden>
+  <div class="who"><span class="av">🤝</span><span>Broker Ramesh<br><small style="font-weight:500;color:var(--mut)">wants to connect</small></span></div>
+  <p id="brokerMsg">Sir, I saw you looking at plots. I have a better plot, same area, very premium. Brokerage is only one month's rent. Shall I block it for you?</p>
+  <div class="row" style="margin-top:12px"><button class="btn sm gold" id="brokerBlock">Block broker</button><button class="btn sm ghost" id="brokerYes">Tell me more</button></div>
 </div>
 
 <div class="story" id="story" hidden><button class="x" id="storyX" aria-label="Close">×</button><div id="storyBody"></div></div>
@@ -512,7 +567,7 @@ function tap(px, py) {
   if (wardOf(r, c) < 0) return toast("🚧 Outside city limits", "This land isn't in any BBMP ward. It's an unapproved layout, like half the ones sold on the outskirts. Pick a spot inside the city.");
   if (CW * view.s < 9) { flyTo(x, y, 22 / CW); return; }
   if (cart.has(k)) cart.delete(k);
-  else { if (cart.size >= CONFIG.maxCells) return toast("Easy, land baron", `Max ${CONFIG.maxCells} cells per order. Leave some city for the rest of us.`); cart.set(k, { r, c }); if (cart.size === 1) toast("📍 " + placeOf(r, c), quipOf(r, c)); }
+  else { if (cart.size >= CONFIG.maxCells) return toast("Easy, land baron", `Max ${CONFIG.maxCells} cells per order. Leave some city for the rest of us.`); cart.set(k, { r, c }); if (cart.size === 1) toast("📍 " + placeOf(r, c), quipOf(r, c)); if (cart.size === 3) summonBroker(); }
   updateCart(); draw();
 }
 function cartPlace() { const n = new Map(); for (const [, v] of cart) { const p = placeOf(v.r, v.c); n.set(p, (n.get(p) || 0) + 1); } return [...n].sort((a, b) => b[1] - a[1])[0][0]; }
@@ -632,7 +687,7 @@ function rent() {
   const r = Math.max(0, +$("rRent").value || 0), d = Math.max(0, +$("rDep").value || 0), pr = price(), dep = r * d;
   const rc = Math.floor(r / pr), dc = Math.floor(dep / pr), kor = areaCells.get("Koramangala") || 1, times = dc / kor, city = dc / TOTAL * 100;
   const korTxt = times >= 1 ? `all of Koramangala ${times.toFixed(1)} times over` : `${(times * 100).toFixed(0)}% of Koramangala`;
-  $("rOut").innerHTML = `<p class="big">${num(rc)} cells</p><p style="margin:0">One month's rent buys ${num(rc)} cells here.</p><p style="margin:8px 0 0">Your ${inr(dep)} deposit buys <b>${korTxt}</b>, or ${city.toFixed(1)}% of Bengaluru. 🫠</p>`;
+  $("rOut").innerHTML = `<p class="big">${num(rc)} cells</p><p style="margin:0">One month's rent buys ${num(rc)} cells here.</p><p style="margin:8px 0 0">Your ${inr(dep)} deposit buys <b>${korTxt}</b>, or ${city.toFixed(1)}% of Bengaluru. 🫠</p><p class="fine">Your landlord's third flat sends its regards.</p>`;
   const text = `I pay ${inr(r)} rent in Bengaluru 😭\nOn Ten Rupee Estates that's ${num(rc)} plots a month.\nMy deposit alone could buy ${korTxt}.\nCheck yours: ${CONFIG.site}`;
   $("rShare").href = waLink(text); $("rCopy").onclick = () => navigator.clipboard?.writeText(text).then(() => $("rCopy").textContent = "Copied", () => {});
 }
@@ -666,6 +721,16 @@ function tick() {
   $("pAfter").textContent = `Then ₹${CONFIG.priceAfter}/cell. Like every builder, we will raise prices.`;
 }
 setInterval(tick, 1000); tick();
+
+// ---------- the broker who always finds you ----------
+let brokerShown = false;
+function summonBroker() {
+  if (brokerShown) return; brokerShown = true; $("broker").hidden = false;
+}
+$("brokerBlock").onclick = () => { $("brokerMsg").textContent = "Blocked. Congratulations, you are the first person in Bengaluru to block a broker successfully."; $("brokerBlock").hidden = $("brokerYes").hidden = true; setTimeout(() => $("broker").hidden = true, 3500); };
+$("brokerYes").onclick = () => { $("brokerMsg").textContent = "Very good sir. Visiting charge ₹500, token advance ₹50,000, brokerage one month. Plot is ₹10. Our plots don't need brokers, so Ramesh has left."; $("brokerBlock").hidden = $("brokerYes").hidden = true; setTimeout(() => $("broker").hidden = true, 5000); };
+setTimeout(summonBroker, 25000);
+setInterval(() => { const n = 9 + Math.floor(Math.random() * 12); $("brokersViewing").textContent = n; }, 7000);
 
 // ---------- boot ----------
 readColors();
