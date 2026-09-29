@@ -1,0 +1,269 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:I;font-weight:400;src:url(assets/fonts/inter-latin-400-normal.woff2)}
+@font-face{font-family:I;font-weight:500;src:url(assets/fonts/inter-latin-500-normal.woff2)}
+@font-face{font-family:I;font-weight:600;src:url(assets/fonts/inter-latin-600-normal.woff2)}
+@font-face{font-family:I;font-weight:700;src:url(assets/fonts/inter-latin-700-normal.woff2)}
+@font-face{font-family:I;font-weight:800;src:url(assets/fonts/inter-latin-800-normal.woff2)}
+@font-face{font-family:I;font-weight:900;src:url(assets/fonts/inter-latin-900-normal.woff2)}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+body{font-family:I,"Noto Color Emoji",sans-serif;color:#f5f5f7;-webkit-font-smoothing:antialiased}
+.stage{position:absolute;inset:0;overflow:hidden}
+.scene{position:absolute;inset:0;display:none}
+.c{position:absolute;left:0;right:0;text-align:center}
+.t{will-change:transform,opacity,filter}
+.grad{background:linear-gradient(100deg,#ffd27a 0%,#f7a531 40%,#ff6b3d 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.light{background:#f5f5f7;color:#1d1d1f}
+.navy{background:radial-gradient(120% 80% at 50% 40%,#10233a 0%,#050b14 70%)}
+.hl{font-weight:800;letter-spacing:-.045em;line-height:.95}
+.sub{font-weight:600;letter-spacing:-.02em}
+.row{position:absolute;left:120px;right:120px;display:flex;align-items:center;justify-content:space-between;font-size:84px;font-weight:800;letter-spacing:-.04em;color:#1d1d1f}
+.row .v{font-size:84px;color:#1f9d55}
+.strike{position:absolute;left:-10px;top:52%;height:12px;background:#ff3b30;border-radius:6px;transform-origin:left center}
+.notif{position:absolute;left:70px;right:70px;top:120px;background:rgba(255,255,255,.82);backdrop-filter:blur(30px);border-radius:44px;padding:34px 38px;box-shadow:0 30px 80px rgba(0,0,0,.18);display:flex;gap:28px;align-items:center;color:#1d1d1f}
+.notif .ic{width:96px;height:96px;border-radius:24px;background:linear-gradient(135deg,#f7c75a,#e39b1c);display:grid;place-items:center;font-size:54px;flex:0 0 auto}
+.notif b{font-size:38px;display:block}
+.notif span{font-size:34px;color:#555}
+.phone{position:absolute;left:50%;top:50%;width:620px;height:1300px;margin:-650px 0 0 -310px;border-radius:92px;background:#0b0b0d;padding:22px;box-shadow:0 60px 140px rgba(0,0,0,.35),inset 0 0 0 3px #2a2a2e}
+.phone .scr{width:100%;height:100%;border-radius:72px;overflow:hidden;background:#08121e;position:relative}
+.phone .scr img{width:100%;display:block}
+.phone .island{position:absolute;left:50%;top:40px;width:180px;height:52px;margin-left:-90px;border-radius:30px;background:#000;z-index:3}
+.bubble{position:absolute;background:#fff;color:#1d1d1f;border-radius:36px;padding:26px 34px;font-size:40px;font-weight:700;letter-spacing:-.02em;box-shadow:0 24px 60px rgba(0,0,0,.25);max-width:760px;line-height:1.15}
+.bubble small{display:block;font-size:26px;font-weight:600;color:#86868b;margin-top:10px;letter-spacing:0}
+.card{position:absolute;left:110px;right:110px;border-radius:56px;background:#fff;box-shadow:0 40px 100px rgba(0,0,0,.12);padding:60px 64px;color:#1d1d1f}
+.card .e{font-size:120px}
+.card h3{font-size:92px;font-weight:800;letter-spacing:-.045em;margin-top:18px}
+.card p{font-size:48px;color:#6e6e73;font-weight:600;margin-top:12px}
+.water{position:absolute;left:-10%;right:-10%;bottom:0;height:0;background:linear-gradient(180deg,#5ab0ff 0%,#1a6fd1 100%)}
+.letter{position:absolute;left:50%;top:50%;width:880px;margin-left:-440px;border-radius:26px;box-shadow:0 60px 160px rgba(0,0,0,.6)}
+.pill{display:inline-block;padding:18px 44px;border-radius:999px;font-weight:800}
+.fine{font-size:30px;color:#86868b;font-weight:500}
+.cursor{position:absolute;width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 0 0 10px rgba(255,255,255,.25);z-index:5}
+.glow{position:absolute;border-radius:50%;opacity:.55}
+</style></head>
+<body><div class="stage" id="stage">
+
+<!-- 1 · Introducing / Land. In Bengaluru. For ₹10 -->
+<div class="scene" id="s1">
+  <div class="glow" id="g1" style="width:1400px;height:1400px;left:-160px;top:300px;background:radial-gradient(circle,rgba(247,165,49,.55) 0%,rgba(247,165,49,.18) 35%,rgba(0,0,0,0) 68%)"></div>
+  <div class="c t hl" id="hook" style="top:560px;font-size:112px;padding:0 70px">Can't afford a house in <span class="grad">Bengaluru?</span></div>
+  <div class="c t sub" id="relax" style="top:1010px;font-size:70px;color:#f7a531">Arre, relax. 😌</div>
+  <div class="c t sub" id="intro" style="top:880px;font-size:64px;color:#86868b">Introducing</div>
+  <div class="c t hl" id="land" style="top:640px;font-size:210px">Land.</div>
+  <div class="c t hl" id="inblr" style="top:880px;font-size:120px;color:#d2d2d7">In Bengaluru.</div>
+  <div class="c t" id="for" style="top:1090px;font-size:72px;font-weight:600;color:#86868b">For</div>
+  <div class="c t hl grad" id="price" style="top:1180px;font-size:330px">₹10.</div>
+</div>
+
+<!-- 2 · No broker / deposit / landlord -->
+<div class="scene light" id="s2">
+  <div class="c t sub" id="never" style="top:480px;font-size:52px;color:#86868b">Things you'll never pay again.</div>
+  <div class="notif t" id="notif"><div class="ic">🤝</div><div><b>Broker Ramesh</b><span>“Sir, one month rent brokerage only…”</span></div></div>
+  <div class="bubble t" id="veg" style="left:330px;top:1300px;font-size:44px">“Veg or non-veg?” 🤨</div>
+  <div class="row t" id="r1" style="top:700px"><span style="position:relative">Broker<i class="strike" id="k1"></i></span><span class="v">₹0</span></div>
+  <div class="row t" id="r2" style="top:900px"><span style="position:relative">10-month deposit<i class="strike" id="k2"></i></span><span class="v">₹0</span></div>
+  <div class="row t" id="r3" style="top:1100px"><span style="position:relative">Landlord<i class="strike" id="k3"></i></span><span class="v">You</span></div>
+</div>
+
+<!-- 3 · map -->
+<div class="scene navy" id="s3">
+  <canvas id="map" width="1080" height="1920" style="position:absolute;inset:0"></canvas>
+  <div class="c t" id="wcount" style="top:170px"><div class="hl" style="font-size:190px"><span id="wn">0</span></div><div class="sub" style="font-size:54px;color:#9fb0c6;margin-top:10px">real BBMP wards</div></div>
+  <div class="c t sub" id="pick" style="top:1560px;font-size:76px">Pick a cell.</div>
+  <div class="c t hl grad" id="yours" style="top:1560px;font-size:110px">It's yours.</div>
+  <div class="cursor t" id="cur"></div>
+</div>
+
+<!-- 4 · rants -->
+<div class="scene light" id="s4">
+  <div class="phone t" id="phone"><div class="scr"><div class="island"></div><img src="assets/shots/map-kor.png" id="phimg"></div></div>
+  <div class="bubble t" id="b0" style="left:90px;top:300px">🏠 “Paid 10 months deposit. Got 0 months of peace.”<small>Tired Techie · Koramangala</small></div>
+  <div class="bubble t" id="b1" style="left:260px;top:1280px">🧓 “Bachelors not allowed. Neither is hope.”<small>BTM Layout</small></div>
+  <div class="bubble t" id="b2" style="left:60px;top:1500px">🚰 “Our water tanker has better attendance than me.”<small>Bellandur</small></div>
+  <div class="bubble t" id="b3" style="left:330px;top:560px">🚗 “Office is 9 km away. Commute is 90 minutes.”<small>Whitefield</small></div>
+  <div class="bubble t" id="b4" style="left:120px;top:900px">🤝 “Broker charged one month's rent to open a door.”<small>HSR Layout</small></div>
+  <div class="bubble t" id="b5" style="left:280px;top:1080px">🧓 “No non-veg, no guests, no pets, no happiness.”<small>Indiranagar</small></div>
+  <div class="c t hl" id="city" style="top:120px;font-size:84px;color:#1d1d1f">For the whole city<br>to read.</div>
+</div>
+
+<!-- 5 · amenities -->
+<div class="scene light" id="s5">
+  <div class="c t sub" id="wc" style="top:260px;font-size:64px;color:#86868b">World-class amenities.</div>
+  <canvas id="foam" width="1080" height="1920" style="position:absolute;inset:0"></canvas>
+  <div class="card t" id="pool" style="top:520px"><div class="e">🏊</div><h3>Infinity pool.</h3><p id="poolp">Every monsoon.<br>Right on the main road.</p></div>
+  <div class="card t" id="lake" style="top:520px"><div class="e">🌊</div><h3>Lake view.</h3><p>With complimentary foam.</p></div>
+  <div class="card t" id="metro" style="top:520px"><div class="e">🚇</div><h3>Metro connectivity.</h3><p>Coming soon. Since <b id="yr" style="color:#1d1d1f">2012</b>.</p></div>
+  <div class="water" id="water"></div>
+  <canvas id="rain" width="1080" height="1920" style="position:absolute;inset:0"></canvas>
+</div>
+
+<!-- 6 · letter -->
+<div class="scene" id="s6" style="background:radial-gradient(90% 60% at 50% 45%,#1b2a40 0%,#000 75%)">
+  <div class="c t sub" id="lux" style="top:170px;font-size:58px;color:#a1a1a6">The most luxurious feature of all.</div>
+  <img class="letter t" id="letter" src="assets/shots/letter.png">
+  <div id="shade" style="position:absolute;left:0;right:0;bottom:0;height:560px;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.92) 45%,#000 100%)"></div>
+  <div class="c t hl grad" id="youl" style="top:1640px;font-size:130px">Landlord: You.</div>
+</div>
+
+<!-- 7 · end card -->
+<div class="scene" id="s7">
+  <div class="glow" id="g7" style="width:1500px;height:1500px;left:-210px;top:180px;background:radial-gradient(circle,rgba(201,162,39,.5) 0%,rgba(201,162,39,.15) 38%,rgba(0,0,0,0) 68%)"></div>
+  <div class="c t hl" id="brand" style="top:640px;font-size:150px">TEN RUPEE<br><span class="grad">ESTATES</span></div>
+  <div class="c t" id="hurry" style="top:1010px"><span class="pill" style="background:#ff3b30;color:#fff;font-size:64px">Hurry.</span></div>
+  <div class="c t sub" id="navr" style="top:1160px;font-size:54px;color:#d2d2d7">Prices go up after Navratri.</div>
+  <div class="c t sub" id="cd" style="top:1240px;font-size:44px;color:#86868b;font-variant-numeric:tabular-nums">Offer ends 11 Oct · <span id="cdv"></span></div>
+  <div class="c t fine" id="like" style="top:1330px;font-size:40px;font-style:italic">(like every builder)</div>
+  <div class="c t" id="cta" style="top:1480px"><span class="pill" style="background:#f5f5f7;color:#000;font-size:64px">Link in bio ↗</span></div>
+  <div class="c t fine" id="sat" style="top:1760px">Satire. Not real land. Very real frustration.</div>
+</div>
+
+</div>
+<script src="assets/geo.js"></script>
+<script src="build/cues.js"></script>
+<script>
+// ---------- timing: every beat is tied to a voiceover line (build/cues.js from tts.py) ----------
+const CUE = Object.fromEntries(window.CUES.cues.map(c => [c.id, c]));
+const DUR = window.CUES.duration;
+const C = (id, f = 0) => { const c = CUE[id]; return c.start + (c.end - c.start) * f; };   // f = fraction through the line
+const cl = x => Math.max(0, Math.min(1, x));
+const eOut = x => 1 - Math.pow(1 - cl(x), 4);
+const eExpo = x => (x = cl(x), x === 1 ? 1 : 1 - Math.pow(2, -10 * x));
+const eInOut = x => (x = cl(x), x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const eBack = x => (x = cl(x), 1 + 2.4 * Math.pow(x - 1, 3) + 1.4 * Math.pow(x - 1, 2));
+const p = (t, a, d) => cl((t - a) / d);
+const $ = id => document.getElementById(id);
+function set(el, { o = 1, x = 0, y = 0, s = 1, b = 0, r = 0 } = {}) {
+  el = typeof el === "string" ? $(el) : el;
+  el.style.opacity = o; el.style.filter = b > .05 ? `blur(${b}px)` : "none";
+  el.style.transform = `translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`;
+}
+function textIn(el, t, a, d = .6, out = null, outD = .35) {
+  const k = eExpo(p(t, a, d)); let o = k, y = (1 - k) * 60, b = (1 - k) * 24;
+  if (out != null) { const q = eInOut(p(t, out, outD)); o *= 1 - q; y -= q * 50; b += q * 16; }
+  set(el, { o, y, b });
+}
+const pop = (id, t, a, d = .42) => { const k = eBack(p(t, a, d)); set(id, { o: cl(k * 1.6), s: .6 + .4 * k, y: (1 - cl(k)) * 40 }); };
+const cut = id => C(id) - .15;
+const scenes = ["s1","s2","s3","s4","s5","s6","s7"];
+const ranges = { s1:[0,cut("broker")], s2:[cut("broker"),cut("wards")], s3:[cut("wards"),cut("write")], s4:[cut("write"),cut("amen")], s5:[cut("amen"),cut("lux")], s6:[cut("lux"),cut("brand")], s7:[cut("brand"),DUR] };
+
+// ---------- map ----------
+const KX = Math.cos(12.97*Math.PI/180)*111.32, KY = 110.57, G = GEO, CW = G.d*KX, CH = G.d*KY;
+const toXY = (lat,lng) => [(lng-G.lng0)*KX,(G.lat0-lat)*KY];
+const WARDS = G.wards.map(([n,no,rings]) => { const path = new Path2D(); let sx=0, sy=0, k=0;
+  for (const f of rings) { let x=0,y=0; for (let i=0;i<f.length;i+=2){ x+=f[i]; y+=f[i+1]; const [px,py]=toXY(y/G.q,x/G.q); i?path.lineTo(px,py):path.moveTo(px,py); sx+=px; sy+=py; k++; } path.closePath(); }
+  return { path, cx:sx/k, cy:sy/k }; });
+const cityW = G.cols*CW, cityH = G.rows*CH, C0 = [cityW/2, cityH/2];
+WARDS.forEach(w => w.d = Math.hypot(w.cx - C0[0], w.cy - C0[1]));
+const maxD = Math.max(...WARDS.map(w => w.d)), KOR = toXY(12.9352, 77.6245);
+const mc = $("map").getContext("2d");
+function drawMap(t) {
+  const a = C("wards"), fitS = 1000 / cityW, z = eInOut(p(t, C("pick") - .2, 1.1));
+  const s = fitS * (1 + z * 17), cx = C0[0] + (KOR[0] + .25 - C0[0]) * z, cy = C0[1] + (KOR[1] + .15 - C0[1]) * z;
+  mc.setTransform(1,0,0,1,0,0); mc.clearRect(0,0,1080,1920); mc.setTransform(s,0,0,s,540 - cx*s, 1000 - cy*s);
+  const span = Math.max(1, C("wards", 1) - a - .3);
+  for (const w of WARDS) { const k = eOut(p(t, a + w.d / maxD * span, .45)); if (k <= 0) continue;
+    mc.globalAlpha = k; mc.fillStyle = "rgba(38,64,98,.55)"; mc.fill(w.path); mc.lineWidth = 1.6 / s; mc.strokeStyle = "rgba(160,190,225,.75)"; mc.stroke(w.path); }
+  mc.globalAlpha = 1;
+  if (z > .4) { mc.globalAlpha = (z - .4) / .6 * .6; mc.strokeStyle = "rgba(224,180,88,.7)"; mc.lineWidth = 1 / s; mc.beginPath();
+    const c0 = Math.floor((cx - 540/s)/CW), c1 = Math.ceil((cx + 540/s)/CW), r0 = Math.floor((cy - 1000/s)/CH), r1 = Math.ceil((cy + 920/s)/CH);
+    for (let r=r0;r<=r1;r++) for (let c=c0;c<=c1;c++) mc.rect(c*CW, r*CH, CW, CH); mc.stroke(); mc.globalAlpha = 1; }
+  const fk = eBack(p(t, C("pick", .45), .4));
+  if (fk > 0) { const r = Math.floor((KOR[1]+.15)/CH), c = Math.floor((KOR[0]+.25)/CW), sc = .2 + .8 * fk;
+    mc.fillStyle = "#f7b733"; mc.shadowColor = "#f7b733"; mc.shadowBlur = 40; mc.fillRect(c*CW + CW*(1-sc)/2, r*CH + CH*(1-sc)/2, CW*sc, CH*sc); mc.shadowBlur = 0; }
+  const lk = eOut(p(t, C("pick") + .3, .5));
+  if (lk > 0) { mc.setTransform(1,0,0,1,0,0); mc.globalAlpha = lk; mc.font = "800 44px I"; mc.fillStyle = "#fff"; mc.textAlign = "center"; mc.fillText("KORAMANGALA", 540, 800); mc.globalAlpha = 1; }
+}
+// ---------- rain & foam ----------
+const rc = $("rain").getContext("2d"), fc = $("foam").getContext("2d");
+const drops = Array.from({length: 140}, (_, i) => ({ x: (i * 97.3) % 1080, sp: 1400 + (i*37)%900, ph: (i*0.137)%1, len: 40 + (i%5)*14 }));
+function drawRain(t, k) { rc.clearRect(0,0,1080,1920); if (k <= 0) return; rc.strokeStyle = `rgba(90,150,230,${.55*k})`; rc.lineWidth = 4; rc.lineCap = "round"; rc.beginPath();
+  for (const d of drops) { const y = ((t * d.sp / 1920 + d.ph) % 1) * 2100 - 100; rc.moveTo(d.x, y); rc.lineTo(d.x - 8, y + d.len); } rc.stroke(); }
+const suds = Array.from({length: 70}, (_, i) => ({ x: (i * 151.7) % 1080, r: 30 + (i * 13) % 70, sp: 120 + (i * 29) % 160, ph: (i * .173) % 1 }));
+function drawFoam(t, k) { fc.clearRect(0,0,1080,1920); if (k <= 0) return;
+  for (const f of suds) { const y = 1980 - ((t * f.sp / 1920 + f.ph) % 1) * 820 * k; fc.globalAlpha = .85 * k; fc.fillStyle = "#fff"; fc.strokeStyle = "rgba(160,200,230,.8)"; fc.lineWidth = 3;
+    fc.beginPath(); fc.arc(f.x + Math.sin(t * 2 + f.ph * 9) * 20, y, f.r * (.6 + .4 * k), 0, 7); fc.fill(); fc.stroke(); } fc.globalAlpha = 1; }
+
+// ---------- frame ----------
+window.render = function (t) {
+  for (const id of scenes) $(id).style.display = (t >= ranges[id][0] && t < ranges[id][1]) ? "block" : "none";
+  const sc = scenes.find(id => t >= ranges[id][0] && t < ranges[id][1]) || "s7", [a, b] = ranges[sc];
+  $("stage").style.transform = `scale(${1 + .035 * p(t, a, b - a)})`;
+  $(sc).style.opacity = sc === "s1" ? 1 : eOut(p(t, a, .18));
+
+  if (sc === "s1") {
+    set("g1", { o: .15 + .35 * eOut(p(t, C("intro", .8), .6)), s: .8 + .3 * eOut(p(t, C("intro", .8), 1)) });
+    { const k = eBack(p(t, 0, .35)), out = eInOut(p(t, C("intro") - .1, .4)); set("hook", { o: cl(.35 + k) * (1 - out), s: (.94 + .06 * k) * (1 - .06 * out), y: -out * 80, b: out * 18 }); }
+    textIn($("relax"), t, C("relax"), .35, C("intro") - .1, .3);
+    textIn($("intro"), t, C("intro"), .45, C("intro", .28), .3);
+    textIn($("land"), t, C("intro", .32), .5);
+    textIn($("inblr"), t, C("intro", .5), .5);
+    textIn($("for"), t, C("intro", .68), .35);
+    const k = eBack(p(t, C("intro", .8), .5)); set("price", { o: cl(k * 1.5), s: .6 + .4 * k, b: (1 - cl(k)) * 20 });
+    const lift = eInOut(p(t, C("intro", .8), .6)) * -60;
+    ["land","inblr","for"].forEach(id => { $(id).style.transform += ` translateY(${lift}px)`; });
+  }
+  if (sc === "s2") {
+    textIn($("never"), t, C("broker") - .05, .5);
+    const nin = eBack(p(t, C("broker"), .4)), nout = eInOut(p(t, C("broker", 1) + .1, .4));
+    set("notif", { y: -300 + 300 * nin, x: nout * 1200, r: nout * 8 });
+    [["r1","k1","broker"],["r2","k2","deposit"],["r3","k3","landlord"]].forEach(([r,k,id]) => {
+      textIn($(r), t, C(id), .4);
+      $(k).style.width = `calc(${100 * eOut(p(t, C(id) + .3, .3))}% + 20px)`;
+      const v = $(r).querySelector(".v"), vk = eBack(p(t, C(id) + .5, .35)); v.style.display = "inline-block"; v.style.opacity = cl(vk*1.4); v.style.transform = `scale(${.5 + .5 * vk})`;
+    });
+    pop("veg", t, C("landlord", .45)); if (t > C("landlord", 1)) $("veg").style.opacity = String(1 - eInOut(p(t, C("landlord", 1), .3)));
+  }
+  if (sc === "s3") {
+    drawMap(t);
+    $("wn").textContent = Math.round(243 * eOut(p(t, C("wards"), Math.max(1.2, C("wards", 1) - C("wards")))));
+    textIn($("wcount"), t, C("wards") - .1, .5, C("pick") - .2, .35);
+    textIn($("pick"), t, C("pick"), .4, C("pick", .55), .25);
+    const yk = eBack(p(t, C("pick", .62), .4)); set("yours", { o: cl(yk * 1.5), s: .7 + .3 * yk });
+    const ck = eInOut(p(t, C("pick") - .1, .6)), tk = p(t, C("pick", .42), .22), press = tk > 0 && tk < 1 ? 1 - Math.sin(tk * Math.PI) * .25 : 1;
+    set("cur", { o: cl((t - C("pick") + .1) * 3) * (1 - p(t, C("pick", 1), .3)), x: 760 - 260 * ck, y: 1300 - 330 * ck, s: press });
+  }
+  if (sc === "s4") {
+    const ph = eExpo(p(t, C("write") - .15, .8)); set("phone", { y: (1 - ph) * 900, s: .78 + .02 * ph, r: (1 - ph) * -6 });
+    $("phimg").style.transform = `translateY(${-120 * p(t, C("write"), 6)}px)`;
+    pop("b0", t, C("write", .3)); textIn($("city"), t, C("city"), .5);
+    pop("b3", t, C("city", .2)); pop("b1", t, C("city", .6));
+    pop("b4", t, C("roast", .05)); pop("b5", t, C("roast", .25)); pop("b2", t, C("roast", .45));
+    if (t > C("roast", .7)) { const sh = Math.sin(t * 50) * 8 * (1 - p(t, C("roast", .7), .5)); $("phone").style.transform += ` translateX(${sh}px)`; }
+  }
+  if (sc === "s5") {
+    textIn($("wc"), t, C("amen"), .5);
+    const card = (id, cue, next) => { const i = eExpo(p(t, C(cue) - .1, .6)), o = next ? eInOut(p(t, C(next) - .2, .35)) : 0;
+      set(id, { o: i * (1 - o), y: (1 - i) * 200 - o * 160, s: .92 + .08 * i - .06 * o }); };
+    card("pool", "pool", "lake"); card("lake", "lake", "metro"); card("metro", "metro", null);
+    $("poolp").style.opacity = eOut(p(t, C("pool", .45), .4));
+    const rain = eOut(p(t, C("pool", .4), .5)) * (1 - eInOut(p(t, C("lake") - .2, .3))); drawRain(t, rain);
+    const lvl = eInOut(p(t, C("pool", .5), 1.2)) * (1 - eInOut(p(t, C("lake") - .2, .4))); $("water").style.height = `${lvl * 700}px`; $("water").style.borderRadius = "50% 50% 0 0 / 40px 40px 0 0";
+    if (lvl > 0) $("pool").style.transform += ` translateY(${Math.sin(t * 5) * 10 * lvl}px) rotate(${Math.sin(t * 3.3) * 1.2 * lvl}deg)`;
+    drawFoam(t, eOut(p(t, C("lake", .45), .6)) * (1 - eInOut(p(t, C("metro") - .2, .3))));
+    const yk = eInOut(p(t, C("metro", .55), Math.max(.6, C("metro", 1) - C("metro", .55)))); $("yr").textContent = t < C("metro", .55) ? "2012" : String(2012 + Math.round(14 * yk)) === "2026" ? "2012 😐" : String(2012 + Math.round(14 * yk));
+  }
+  if (sc === "s6") {
+    textIn($("lux"), t, C("lux") - .05, .6);
+    const lk = eExpo(p(t, C("lux") + .1, 1.1)), zk = eInOut(p(t, C("you") - .25, .8)), el = $("letter");
+    el.style.opacity = lk; el.style.transformOrigin = "78% 66%";
+    el.style.transform = `translateY(${-560 + (1 - lk) * 700 - zk * 120}px) perspective(1600px) rotateX(${(1 - lk) * 28}deg) scale(${.9 + .06 * lk + .03 * p(t, C("lux") + 1.2, 1) + zk * 1.05})`;
+    $("lux").style.opacity = String(+$("lux").style.opacity * (1 - zk)); $("shade").style.opacity = zk;
+    const yk = eBack(p(t, C("you", .35), .45)); set("youl", { o: cl(yk * 1.5), s: .7 + .3 * yk });
+  }
+  if (sc === "s7") {
+    const bk = eExpo(p(t, C("brand") - .05, .8)); set("brand", { o: bk, s: .9 + .1 * bk, b: (1 - bk) * 30 }); set("g7", { o: .1 + .3 * bk, s: .7 + .3 * bk });
+    const hk = eBack(p(t, C("hurry"), .35)), h0 = C("hurry") + .35, shake = t > h0 && t < h0 + .6 ? Math.sin(t * 60) * 10 * (1 - p(t, h0, .6)) : 0;
+    set("hurry", { o: cl(hk * 1.5), s: .6 + .4 * hk, x: shake });
+    textIn($("navr"), t, C("hurry", .3), .45); textIn($("cd"), t, C("hurry", .75), .45);
+    const base = Date.parse("2026-10-11T06:00:00+05:30") - Date.parse("2026-10-01T09:00:00+05:30") - Math.max(0, t - C("hurry", .75)) * 1000;
+    const d = Math.floor(base / 864e5), h = Math.floor(base / 36e5) % 24, m = Math.floor(base / 6e4) % 60, s = Math.floor(base / 1e3) % 60;
+    $("cdv").textContent = `${d}d ${String(h).padStart(2,"0")}h ${String(m).padStart(2,"0")}m ${String(s).padStart(2,"0")}s`;
+    textIn($("like"), t, C("builder"), .4); pop("cta", t, C("bio") - .05, .45); textIn($("sat"), t, C("bio", 1) + .2, .7);
+  }
+};
+window.render(0);
+</script>
+</body></html>

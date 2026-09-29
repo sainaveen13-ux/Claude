@@ -1,0 +1,26 @@
+{
+  "style": "Read this like an energetic, witty Indian stand-up comic doing a fake luxury real-estate ad. Clear Indian English accent, fast and punchy, playful sarcasm, big smile in the voice, mid-to-high pitch, never deep or slow:",
+  "lines": [
+    { "id": "hook",     "text": "Can't afford a house in Bengaluru?" },
+    { "id": "relax",    "text": "Arre, relax." },
+    { "id": "intro",    "text": "Introducing... land. In Bengaluru. For just ten rupees!" },
+    { "id": "broker",   "text": "No broker." },
+    { "id": "deposit",  "text": "No ten-month deposit." },
+    { "id": "landlord", "text": "No landlord asking, veg or non-veg?" },
+    { "id": "wards",    "text": "Two hundred and forty-three real BBMP wards." },
+    { "id": "pick",     "text": "Pick a cell. Boom. It's yours." },
+    { "id": "write",    "text": "Then write your frustration on it..." },
+    { "id": "city",     "text": "for the whole city to read." },
+    { "id": "roast",    "text": "Landlords, brokers, water tankers. Everybody gets roasted." },
+    { "id": "amen",     "text": "World-class amenities, of course." },
+    { "id": "pool",     "text": "Infinity pool... every monsoon." },
+    { "id": "lake",     "text": "Lake view... with complimentary foam." },
+    { "id": "metro",    "text": "Metro connectivity. Coming soon. Since 2012." },
+    { "id": "lux",      "text": "And the most luxurious feature of all..." },
+    { "id": "you",      "text": "you are the landlord!" },
+    { "id": "brand",    "text": "Ten Rupee Estates." },
+    { "id": "hurry",    "text": "Hurry. Prices go up after Navratri." },
+    { "id": "builder",  "text": "Just like every builder." },
+    { "id": "bio",      "text": "Link in bio." }
+  ]
+}
